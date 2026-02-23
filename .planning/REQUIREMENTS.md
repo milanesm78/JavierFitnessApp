@@ -1,7 +1,7 @@
 # Requirements: JavierFitness
 
 **Defined:** 2026-02-22
-**Core Value:** Clients always have their personalized training plan at their fingertips — with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
+**Core Value:** Clients always have their personalized training plan at their fingertips -- with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
 
 ## v1 Requirements
 
@@ -28,7 +28,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PLAN-03**: Trainer can add exercises to a training day with prescribed sets, reps, and weight
 - [ ] **PLAN-04**: Client can view their assigned training plan grouped by training day
 - [ ] **PLAN-05**: Trainer can define training cycle length per client
-- [ ] **PLAN-06**: Plans are versioned — editing a plan creates a new version for the next cycle, preserving historical data
+- [ ] **PLAN-06**: Plans are versioned -- editing a plan creates a new version for the next cycle, preserving historical data
 
 ### Workout Logging
 
@@ -40,7 +40,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Auto-Progression
 
 - [ ] **PROG-01**: App detects when client logs 15+ reps on an exercise and suggests +2.5kg for next session
-- [ ] **PROG-02**: Auto-progression is a suggestion — client or trainer confirms before applying
+- [ ] **PROG-02**: Auto-progression is a suggestion -- client or trainer confirms before applying
 
 ### Body Measurements
 
@@ -89,11 +89,11 @@ Explicitly excluded. Documented to prevent scope creep.
 | In-app payments | Javier handles payments outside the app (cash, Bizum) |
 | Real-time chat | WhatsApp already handles trainer-client communication |
 | Push notifications | Retention comes from product value, not nagging |
-| Multi-trainer support | Single trainer architecture — Javier only |
+| Multi-trainer support | Single trainer architecture -- Javier only |
 | Native mobile app | Responsive web app is sufficient |
 | Social features / leaderboards | Privacy concerns, too few users for social features |
 | Nutrition tracking / meal plans | Separate domain, out of scope |
-| AI-generated workout plans | Trainer expertise is the value — app is a tool, not a replacement |
+| AI-generated workout plans | Trainer expertise is the value -- app is a tool, not a replacement |
 | Wearable device integration | Complexity without proportional value for strength training |
 | Offline mode / PWA | Standard web app; gym connectivity assumed sufficient |
 
@@ -103,44 +103,44 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| AUTH-05 | — | Pending |
-| EXER-01 | — | Pending |
-| EXER-02 | — | Pending |
-| EXER-03 | — | Pending |
-| PLAN-01 | — | Pending |
-| PLAN-02 | — | Pending |
-| PLAN-03 | — | Pending |
-| PLAN-04 | — | Pending |
-| PLAN-05 | — | Pending |
-| PLAN-06 | — | Pending |
-| WLOG-01 | — | Pending |
-| WLOG-02 | — | Pending |
-| WLOG-03 | — | Pending |
-| WLOG-04 | — | Pending |
-| PROG-01 | — | Pending |
-| PROG-02 | — | Pending |
-| BODY-01 | — | Pending |
-| BODY-02 | — | Pending |
-| BODY-03 | — | Pending |
-| TRCK-01 | — | Pending |
-| TRCK-02 | — | Pending |
-| TRCK-03 | — | Pending |
-| DASH-01 | — | Pending |
-| DASH-02 | — | Pending |
-| DASH-03 | — | Pending |
-| INFR-01 | — | Pending |
-| INFR-02 | — | Pending |
-| INFR-03 | — | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| AUTH-05 | Phase 1 | Pending |
+| EXER-01 | Phase 1 | Pending |
+| EXER-02 | Phase 1 | Pending |
+| EXER-03 | Phase 2 | Pending |
+| PLAN-01 | Phase 2 | Pending |
+| PLAN-02 | Phase 2 | Pending |
+| PLAN-03 | Phase 2 | Pending |
+| PLAN-04 | Phase 2 | Pending |
+| PLAN-05 | Phase 2 | Pending |
+| PLAN-06 | Phase 2 | Pending |
+| WLOG-01 | Phase 2 | Pending |
+| WLOG-02 | Phase 2 | Pending |
+| WLOG-03 | Phase 2 | Pending |
+| WLOG-04 | Phase 2 | Pending |
+| PROG-01 | Phase 4 | Pending |
+| PROG-02 | Phase 4 | Pending |
+| BODY-01 | Phase 3 | Pending |
+| BODY-02 | Phase 3 | Pending |
+| BODY-03 | Phase 3 | Pending |
+| TRCK-01 | Phase 3 | Pending |
+| TRCK-02 | Phase 3 | Pending |
+| TRCK-03 | Phase 3 | Pending |
+| DASH-01 | Phase 2 | Pending |
+| DASH-02 | Phase 2 | Pending |
+| DASH-03 | Phase 2 | Pending |
+| INFR-01 | Phase 1 | Pending |
+| INFR-02 | Phase 1 | Pending |
+| INFR-03 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 32 total
-- Mapped to phases: 0
-- Unmapped: 32 ⚠️
+- Mapped to phases: 32
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-22*
-*Last updated: 2026-02-22 after initial definition*
+*Last updated: 2026-02-23 after roadmap creation*
