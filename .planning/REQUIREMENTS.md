@@ -9,11 +9,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can create account with email and password
-- [ ] **AUTH-02**: User is assigned a role (trainer or client) upon registration
-- [ ] **AUTH-03**: Client account requires trainer activation before accessing training features
-- [ ] **AUTH-04**: User session persists across browser refresh
-- [ ] **AUTH-05**: Trainer and client are routed to their respective portals after login
+- [x] **AUTH-01**: User can create account with email and password
+- [x] **AUTH-02**: User is assigned a role (trainer or client) upon registration
+- [x] **AUTH-03**: Client account requires trainer activation before accessing training features
+- [x] **AUTH-04**: User session persists across browser refresh
+- [x] **AUTH-05**: Trainer and client are routed to their respective portals after login
 
 ### Exercise Library
 
@@ -103,11 +103,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
+| AUTH-05 | Phase 1 | Complete |
 | EXER-01 | Phase 1 | Pending |
 | EXER-02 | Phase 1 | Pending |
 | EXER-03 | Phase 2 | Pending |

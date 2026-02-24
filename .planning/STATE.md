@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 1 of 4 (Foundation and Exercise Library)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: Executing
-Last activity: 2026-02-23 -- Completed 01-01-PLAN.md
+Last activity: 2026-02-24 -- Completed 01-02-PLAN.md
 
-Progress: [█░░░░░░░░░] 10%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 20min
-- Total execution time: 0.3 hours
+- Total plans completed: 2
+- Average duration: 15min
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 1 | 20min | 20min |
+| 1 | 2 | 29min | 15min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (20min)
-- Trend: Starting
+- Last 5 plans: 01-01 (20min), 01-02 (9min)
+- Trend: Accelerating
 
 *Updated after each plan completion*
 
@@ -50,6 +50,11 @@ Recent decisions affecting current work:
 - [01-01]: Zinc palette for shadcn/ui with dark/light theme CSS variables
 - [01-01]: 10 granular RLS policies (separate per operation, never FOR ALL)
 - [01-01]: Custom Access Token Hook for JWT role injection (not user_metadata)
+- [01-02]: JWT role decoded client-side via atob(token.split('.')[1]) without external library
+- [01-02]: ThemeProvider defaults to dark theme for fitness app convention
+- [01-02]: Database types restructured to explicit field listings for Supabase v2 typed client compatibility
+- [01-02]: Role selection via toggle buttons for better mobile UX
+- [01-02]: Bottom navigation for both portals with large touch targets for gym use
 
 ### Pending Todos
 
@@ -57,12 +62,12 @@ None yet.
 
 ### Blockers/Concerns
 
-- [01-01]: Supabase project must be created and .env.local configured before Plan 02 can fully work
+- [01-01]: Supabase project must be created and .env.local configured before auth features will fully work
 - [Research]: Anthropometric measurement ranges should be confirmed with Javier before Phase 3
 - [Research]: Auto-progression rule specifics (which sets count, session threshold, fixed vs variable increment) must be clarified with Javier before Phase 4
 
 ## Session Continuity
 
-Last session: 2026-02-23
-Stopped at: Completed 01-01-PLAN.md (foundation infrastructure)
-Resume file: .planning/phases/01-foundation-and-exercise-library/01-01-SUMMARY.md
+Last session: 2026-02-24
+Stopped at: Completed 01-02-PLAN.md (auth system, routing, layouts)
+Resume file: .planning/phases/01-foundation-and-exercise-library/01-02-SUMMARY.md

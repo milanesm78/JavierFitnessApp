@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Project scaffold, Supabase schema, i18n, Tailwind + shadcn/ui, utilities
-- [ ] 01-02-PLAN.md — Auth system, role-based routing, portal layouts, theme toggle, client activation
+- [x] 01-02-PLAN.md — Auth system, role-based routing, portal layouts, theme toggle, client activation
 - [ ] 01-03-PLAN.md — Exercise library CRUD, DecimalInput component, end-to-end verification
 
 ### Phase 2: Core Training Loop
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Exercise Library | 1/3 | In Progress | - |
+| 1. Foundation and Exercise Library | 2/3 | In Progress | - |
 | 2. Core Training Loop | 0/4 | Not started | - |
 | 3. Measurements and Progress | 0/2 | Not started | - |
 | 4. Auto-Progression | 0/1 | Not started | - |
