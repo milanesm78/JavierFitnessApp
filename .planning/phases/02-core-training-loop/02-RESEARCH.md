@@ -1,6 +1,6 @@
 # Phase 2: Core Training Loop - Research
 
-**Researched:** 2026-02-23
+**Researched:** 2026-02-23 (re-researched 2026-02-23)
 **Domain:** Training plan builder, workout logging, plan versioning, trainer dashboard
 **Confidence:** HIGH
 
@@ -10,9 +10,50 @@ Phase 2 is the product's reason to exist. It covers three interconnected domains
 
 The data model must be designed around immutability from the start. The established pattern is a "Slowly Changing Dimension" approach: each `training_plan` has a `version` number and a status (`draft`, `active`, `archived`). When the trainer edits a plan, the system creates a new plan version record. Workout sessions reference a specific `plan_version_id`, making them permanently linked to the prescription that was active when the workout was logged. This is simpler and more robust than event sourcing or temporal tables for this scale.
 
-The mobile workout logging UX is the highest-risk UI surface. Clients log workouts at the gym between sets, with sweaty hands, on a phone in one hand. The interface must minimize taps per set (target: 3-4 max), use large touch targets (56px+), pre-fill prescribed values, and support a "complete as prescribed" one-tap action. React Hook Form's `useFieldArray` handles the nested dynamic form structure (exercises -> sets) with minimal re-renders. YouTube videos should use `react-lite-youtube-embed` instead of raw iframes to save ~500KB initial load per video.
+The mobile workout logging UX is the highest-risk UI surface. Clients log workouts at the gym between sets, with sweaty hands, on a phone in one hand. The interface must minimize taps per set (target: 3-4 max), use large touch targets (56px+), pre-fill from last session's actual values (falling back to prescribed values), and support a "complete as prescribed" one-tap action. React Hook Form's `useFieldArray` handles the nested dynamic form structure (exercises -> sets) with minimal re-renders. YouTube videos should use `react-lite-youtube-embed` instead of raw iframes to save ~500KB initial load per video.
 
-**Primary recommendation:** Build the data model with immutable plan versioning from day one using a version number + status pattern. Use `useFieldArray` for the plan builder's nested form. Use `react-lite-youtube-embed` for exercise videos. Design the workout logging UI for one-thumb mobile operation with pre-filled values and large touch targets.
+**CRITICAL CORRECTION from prior research:** The prior Phase 2 research incorrectly referenced Next.js 15, Server Components, Server Actions, and `@supabase/ssr`. Phase 1 establishes a **Vite SPA** architecture (React 19 + Vite 7 + React Router v7 in library mode). All Phase 2 patterns must align with client-side SPA architecture using the Supabase JS client directly, TanStack Query for data fetching/caching, and client-side React Hook Form for form management. There are no Server Components or Server Actions in this architecture.
+
+**Zod version update:** Zod 4 is now the default when installing `zod` from npm (as of July 2025). It is 6-14x faster than Zod 3, has 57% smaller bundle, and is fully supported by `@hookform/resolvers` v5+. New projects should use Zod 4 directly via `import { z } from "zod"`.
+
+**Primary recommendation:** Build the data model with immutable plan versioning from day one using a version number + status pattern. Use React Hook Form `useFieldArray` for the plan builder's nested form with Zod 4 validation. Use `react-lite-youtube-embed` for exercise videos. Design the workout logging UI for one-thumb mobile operation with pre-filled values and large touch targets. Use TanStack Query with Supabase for all data fetching (no Server Actions -- this is a Vite SPA).
+
+<user_constraints>
+## User Constraints (from CONTEXT.md)
+
+### Locked Decisions
+- Workout logging flow: Pre-fill set values from **last session's actual values** (not prescribed values). Falls back to prescribed values if no prior session exists
+- Trainer dashboard: Javier manages **20-50 clients** -- scrollable list with search bar for quick access
+- Gym UX: App used with sweaty hands on a phone -- every UX choice should optimize for minimal taps and large touch targets
+
+### Claude's Discretion
+The user delegated these choices -- Claude has full flexibility during planning/implementation:
+
+**Workout logging:**
+- Exercise display: one at a time (focused) vs all visible (scrollable) -- pick based on mobile gym UX
+- YouTube video access: behind a tap icon vs always-visible thumbnail -- pick for minimal distraction during logging
+- Post-workout summary: show stats screen vs simple confirmation -- pick what adds value without being annoying
+
+**Plan builder:**
+- Exercise picker: searchable dropdown vs browse dialog -- pick based on library size and trainer speed
+- Versioning UX: automatic draft on edit vs explicit "Create new version" button -- pick the safest and simplest flow
+- Exercise reordering: up/down arrow buttons vs drag-and-drop -- pick for mobile-first v1 context
+- Day label format: free text vs auto-letters with optional name -- pick for best plan organization
+
+**Training day navigation:**
+- Day layout: tabs vs cards -- pick based on typical number of training days (3-6)
+- Next day suggestion: highlight suggested day vs always manual selection -- pick for convenience vs simplicity
+- Session resume: detect incomplete session and resume vs always start fresh -- pick for gym usage patterns
+- Workout history: simple date list vs calendar view -- pick the simplest useful approach
+
+**Trainer dashboard:**
+- Dashboard home: client list first vs summary overview + list -- pick for 20-50 client roster
+- Client detail: tabbed view vs single scrollable page -- pick for mobile usability with plan, logs, and progress data
+- Status colors: green/yellow/gray vs green/blue/gray vs other -- pick a clean scheme fitting the app design
+
+### Deferred Ideas (OUT OF SCOPE)
+None -- discussion stayed within phase scope
+</user_constraints>
 
 <phase_requirements>
 ## Phase Requirements
@@ -21,17 +62,17 @@ The mobile workout logging UX is the highest-risk UI surface. Clients log workou
 |----|-------------|-----------------|
 | PLAN-01 | Trainer can create a training plan for a specific client | Plan builder with React Hook Form `useFieldArray` for nested days/exercises; Supabase `training_plans` table with RLS; Architecture Pattern 1 (Plan Builder) |
 | PLAN-02 | Trainer can organize a plan by training days (Day A, Day B, etc.) | Nested `useFieldArray` for days within a plan; `training_days` table with `day_label` and `order` columns; Architecture Pattern 1 |
-| PLAN-03 | Trainer can add exercises to a training day with prescribed sets, reps, and weight | Second-level nested `useFieldArray` for exercises within days; `plan_exercises` table; Zod validation for numeric fields; Architecture Pattern 1 |
+| PLAN-03 | Trainer can add exercises to a training day with prescribed sets, reps, and weight | Second-level nested `useFieldArray` for exercises within days; `plan_exercises` table; Zod 4 validation for numeric fields; Architecture Pattern 1 |
 | PLAN-04 | Client can view their assigned training plan grouped by training day | TanStack Query for data fetching; Supabase RLS ensures client sees only their own plan; grouped display component |
 | PLAN-05 | Trainer can define training cycle length per client | `cycle_length_weeks` column on `training_plans` table; cycle start/end date computation with date-fns |
 | PLAN-06 | Plans are versioned -- editing creates new version for next cycle, preserving history | Architecture Pattern 2 (Immutable Plan Versioning); version number + status pattern; workout logs reference specific plan version |
 | WLOG-01 | Client can start a workout session for a training day | `workout_sessions` table with `started_at` timestamp; references `training_day_id` and `plan_version_id` for immutability |
-| WLOG-02 | Client can log weight and reps for each set of each exercise | `workout_sets` table; React Hook Form with `useFieldArray`; pre-filled from prescription; inputmode="decimal" for mobile; Architecture Pattern 3 (Gym-Floor Logging) |
+| WLOG-02 | Client can log weight and reps for each set of each exercise | `workout_sets` table; React Hook Form with `useFieldArray`; pre-filled from last session actual values; inputmode="decimal" for mobile; Architecture Pattern 3 (Gym-Floor Logging) |
 | WLOG-03 | Workout session tracks start and completion time | `started_at` and `completed_at` columns on `workout_sessions`; computed duration display |
 | WLOG-04 | Client can view workout history (past sessions with logged sets) | TanStack Query for paginated fetching; grouped by session date; Supabase query joining sessions with sets |
-| EXER-03 | Client can view exercise with inline YouTube video embed from workout view | `react-lite-youtube-embed` for performance; thumbnail-first loading; extract video ID from stored YouTube URL |
-| DASH-01 | Trainer can view list of all clients with activity status | shadcn/ui Table component; Supabase query with profile + latest session aggregation; RLS policy for trainer role |
-| DASH-02 | Trainer sees color-coded indicators for today's workout completion | Computed on page load via Supabase query (not real-time); color logic: green=completed, yellow=in-progress, gray=not started |
+| EXER-03 | Client can view exercise with inline YouTube video embed from workout view | `react-lite-youtube-embed` v3.5.0 for performance; thumbnail-first loading; extract video ID from stored YouTube URL |
+| DASH-01 | Trainer can view list of all clients with activity status | shadcn/ui Table component; Supabase RPC function with LATERAL JOINs for efficient status aggregation; RLS policy for trainer role |
+| DASH-02 | Trainer sees color-coded indicators for today's workout completion | Computed via Supabase RPC function (not real-time); color logic: green=completed, yellow=in-progress, gray=not started |
 | DASH-03 | Trainer can select a client to view their plan, logs, and progress | Client detail page with tabbed navigation (shadcn/ui Tabs); TanStack Query for lazy-loaded data per tab |
 </phase_requirements>
 
@@ -40,25 +81,25 @@ The mobile workout logging UX is the highest-risk UI surface. Clients log workou
 ### Core (from Phase 1 foundation -- already installed)
 | Library | Version | Purpose | Why Standard |
 |---------|---------|---------|--------------|
-| Next.js | ^15.x | Full-stack React framework | App Router with Server Components, Server Actions for form submissions |
-| React | ^19.x | UI library | `useActionState` for Server Actions, stable Server Components |
-| TypeScript | ^5.x | Type safety | Type inference from Supabase schema and Zod schemas |
-| Supabase | ^2.x (JS client) | Database, Auth, API | PostgreSQL with RLS for role-based data isolation |
-| @supabase/ssr | ^0.x | SSR auth helpers | Cookie-based auth for Next.js middleware and Server Components |
-| React Hook Form | ^7.x | Form state management | `useFieldArray` for dynamic nested forms (plan builder + workout logging) |
-| Zod | ^3.x | Schema validation | Shared validation between client forms and Server Actions |
-| @hookform/resolvers | ^3.x | RHF + Zod integration | `zodResolver` connects Zod schemas to React Hook Form |
-| @tanstack/react-query | ^5.x | Server state management | Caching, optimistic updates for workout logging, background refetch |
-| Tailwind CSS | ^3.4+ | Utility-first CSS | Mobile-first responsive design, large touch targets |
-| shadcn/ui | Latest | Component library | Table, Tabs, Form, Dialog, Card, Badge components |
-| next-intl | ^3.x | i18n | Spanish/English translation for all Phase 2 UI strings |
-| date-fns | ^3.x+ | Date manipulation | Training cycle date calculations, session timestamps, duration formatting |
-| lucide-react | Latest | Icons | Status indicators, navigation, action buttons |
+| React | 19.2.x | UI library | Latest stable; production-ready; universal ecosystem support |
+| Vite | 7.x | Build tool / dev server | 40x faster than CRA; native ES modules; standard for new React projects |
+| TypeScript | 5.x | Type safety | Type inference from Supabase schema and Zod schemas |
+| @supabase/supabase-js | 2.97.x | Database, Auth, API | PostgreSQL with RLS for role-based data isolation |
+| React Router | 7.x | Client-side routing | Library mode for SPA; role-based route guards |
+| @tanstack/react-query | 5.90.x | Server state management | Caching, optimistic updates for workout logging, background refetch |
+| Tailwind CSS | 4.x | Utility-first CSS | Mobile-first responsive design, large touch targets |
+| shadcn/ui | Latest (CLI) | Component library | Table, Tabs, Form, Dialog, Card, Badge components |
+| react-i18next | 16.x | i18n | Spanish/English translation for all Phase 2 UI strings |
+| lucide-react | 0.575.x | Icons | Status indicators, navigation, action buttons |
 
 ### New for Phase 2
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| react-lite-youtube-embed | ^2.4+ | Lightweight YouTube embed | Exercise video display in workout view; saves ~500KB vs raw iframe per video |
+| react-hook-form | 7.71.x | Form state management | `useFieldArray` for dynamic nested forms (plan builder + workout logging) |
+| zod | 4.3.x (Zod 4) | Schema validation | Shared validation for plan and workout forms; 6-14x faster than Zod 3 |
+| @hookform/resolvers | 5.2.x | RHF + Zod integration | `zodResolver` connects Zod 4 schemas to React Hook Form |
+| react-lite-youtube-embed | 3.5.x | Lightweight YouTube embed | Exercise video display in workout view; saves ~500KB vs raw iframe per video |
+| date-fns | 4.1.x | Date manipulation | Training cycle date calculations, session timestamps, duration formatting |
 
 ### Alternatives Considered
 | Instead of | Could Use | Tradeoff |
@@ -67,69 +108,67 @@ The mobile workout logging UX is the highest-risk UI surface. Clients log workou
 | react-lite-youtube-embed | react-youtube | react-youtube wraps the full YouTube IFrame API (460KB+); overkill when we only need basic playback, no programmatic control |
 | Supabase Realtime for dashboard | Polling or load-on-demand | Realtime adds WebSocket complexity; for a trainer checking a dashboard a few times per day with 20-50 clients, load-on-demand with TanStack Query stale-while-revalidate is simpler and sufficient |
 | Custom drag-and-drop plan builder | Form-based plan builder | Drag-and-drop (e.g., dnd-kit) adds significant complexity for marginal UX gain; a form-based builder with add/remove/reorder buttons is faster to build and easier to use on mobile |
+| Zod 3 | Zod 4 | Zod 4 is now the npm default; 6-14x faster parsing, 57% smaller bundle, better TS compilation (25k -> 175 type instantiations); @hookform/resolvers v5+ supports it natively |
+| React Hook Form v8 (beta) | React Hook Form v7 (stable) | v8 is in beta only; v7.71.x is the latest stable; do not use beta for production |
 
 **Installation (new packages only):**
 ```bash
-npm install react-lite-youtube-embed
+pnpm add react-hook-form zod @hookform/resolvers react-lite-youtube-embed date-fns
 ```
+
+**Note:** `zod` now exports Zod 4 by default. Import as `import { z } from "zod"`. No subpath needed for new projects.
 
 ## Architecture Patterns
 
 ### Recommended Project Structure (Phase 2 additions)
 ```
 src/
-├── app/
-│   ├── [locale]/
-│   │   ├── trainer/
-│   │   │   ├── clients/
-│   │   │   │   ├── page.tsx              # DASH-01: Client list with status
-│   │   │   │   └── [clientId]/
-│   │   │   │       ├── page.tsx          # DASH-03: Client detail (plan, logs, progress)
-│   │   │   │       └── plan/
-│   │   │   │           ├── page.tsx      # PLAN-01: View/manage client plan
-│   │   │   │           └── edit/
-│   │   │   │               └── page.tsx  # PLAN-01-03: Plan builder form
-│   │   │   └── layout.tsx
-│   │   ├── client/
-│   │   │   ├── plan/
-│   │   │   │   └── page.tsx              # PLAN-04: View my plan by day
-│   │   │   ├── workout/
-│   │   │   │   ├── [dayId]/
-│   │   │   │   │   └── page.tsx          # WLOG-01-03: Active workout logging
-│   │   │   │   └── history/
-│   │   │   │       └── page.tsx          # WLOG-04: Workout history
-│   │   │   └── layout.tsx
-├── components/
-│   ├── plan-builder/
-│   │   ├── plan-form.tsx                 # Main plan builder form with useFieldArray
-│   │   ├── training-day-card.tsx         # Single training day with exercises
-│   │   ├── exercise-row.tsx             # Exercise prescription (sets/reps/weight)
-│   │   └── exercise-picker-dialog.tsx    # Dialog to select from exercise library
-│   ├── workout/
-│   │   ├── workout-session.tsx           # Active workout session container
-│   │   ├── exercise-logger.tsx           # Per-exercise set logging interface
-│   │   ├── set-row.tsx                   # Single set input (weight + reps)
-│   │   ├── youtube-player.tsx            # react-lite-youtube-embed wrapper
-│   │   └── session-summary.tsx           # Post-workout summary
-│   ├── dashboard/
-│   │   ├── client-list-table.tsx         # Trainer's client table with status
-│   │   ├── client-status-badge.tsx       # Color-coded activity indicator
-│   │   └── client-detail-tabs.tsx        # Tabbed view of client data
+├── features/
+│   ├── plans/
+│   │   ├── components/
+│   │   │   ├── plan-form.tsx                 # Main plan builder form with useFieldArray
+│   │   │   ├── training-day-card.tsx         # Single training day with exercises
+│   │   │   ├── exercise-row.tsx              # Exercise prescription (sets/reps/weight)
+│   │   │   └── exercise-picker-dialog.tsx    # Dialog to select from exercise library
+│   │   ├── hooks/
+│   │   │   ├── usePlans.ts                   # TanStack Query hooks for plan data
+│   │   │   └── usePlanMutations.ts           # Mutations for plan CRUD and versioning
+│   │   ├── schemas.ts                        # Zod 4 schemas for training plans
+│   │   └── types.ts                          # Plan-related TypeScript types
+│   ├── workouts/
+│   │   ├── components/
+│   │   │   ├── workout-session.tsx           # Active workout session container
+│   │   │   ├── exercise-logger.tsx           # Per-exercise set logging interface
+│   │   │   ├── set-row.tsx                   # Single set input (weight + reps)
+│   │   │   ├── youtube-player.tsx            # react-lite-youtube-embed wrapper
+│   │   │   └── session-summary.tsx           # Post-workout summary
+│   │   ├── hooks/
+│   │   │   ├── useWorkouts.ts               # TanStack Query hooks for workout data
+│   │   │   └── useWorkoutMutations.ts        # Mutations for session and set logging
+│   │   ├── schemas.ts                        # Zod 4 schemas for workout logging
+│   │   └── types.ts                          # Workout-related TypeScript types
+│   └── dashboard/
+│       ├── components/
+│       │   ├── client-list-table.tsx         # Trainer's client table with status
+│       │   ├── client-status-badge.tsx       # Color-coded activity indicator
+│       │   └── client-detail-tabs.tsx        # Tabbed view of client data
+│       ├── hooks/
+│       │   └── useDashboard.ts              # TanStack Query hooks for dashboard data
+│       └── types.ts                          # Dashboard-related types
+├── pages/
+│   ├── trainer/
+│   │   ├── clients.tsx                       # DASH-01: Client list with status
+│   │   ├── client-detail.tsx                 # DASH-03: Client detail (plan, logs, progress)
+│   │   ├── plan-view.tsx                     # PLAN-01: View/manage client plan
+│   │   └── plan-edit.tsx                     # PLAN-01-03: Plan builder form
+│   └── client/
+│       ├── my-plan.tsx                       # PLAN-04: View my plan by day
+│       ├── workout.tsx                       # WLOG-01-03: Active workout logging
+│       └── workout-history.tsx               # WLOG-04: Workout history
 ├── lib/
-│   ├── schemas/
-│   │   ├── plan.ts                       # Zod schemas for training plans
-│   │   ├── workout.ts                    # Zod schemas for workout logging
-│   │   └── dashboard.ts                  # Zod schemas for dashboard data
-│   ├── queries/
-│   │   ├── plans.ts                      # TanStack Query hooks for plan data
-│   │   ├── workouts.ts                   # TanStack Query hooks for workout data
-│   │   └── dashboard.ts                  # TanStack Query hooks for dashboard data
-│   ├── actions/
-│   │   ├── plans.ts                      # Server Actions for plan CRUD
-│   │   └── workouts.ts                   # Server Actions for workout logging
 │   └── utils/
-│       ├── youtube.ts                    # YouTube URL parsing, video ID extraction
-│       └── cycle.ts                      # Training cycle date calculations
+│       ├── youtube.ts                        # YouTube URL parsing, video ID extraction
+│       └── cycle.ts                          # Training cycle date calculations
 ```
 
 ### Pattern 1: Plan Builder with Nested useFieldArray
@@ -140,8 +179,8 @@ src/
 
 **Example:**
 ```typescript
-// Source: React Hook Form docs (react-hook-form.com/api/usefieldarray)
-// Adapted for training plan builder
+// Source: React Hook Form docs (react-hook-form.com/docs/usefieldarray)
+// Adapted for Vite SPA training plan builder with Zod 4
 
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -208,9 +247,9 @@ function PlanBuilderForm({ clientId }: { clientId: string }) {
 
 // Nested field array: exercises within a training day
 function TrainingDayCard({ control, dayIndex, onRemove }) {
-  const { fields: exerciseFields, append, remove } = useFieldArray({
+  const { fields: exerciseFields, append, remove, move } = useFieldArray({
     control,
-    // Cast required for nested field arrays
+    // TypeScript cast required for nested field arrays
     name: `training_days.${dayIndex}.exercises` as `training_days.0.exercises`,
   })
 
@@ -223,6 +262,8 @@ function TrainingDayCard({ control, dayIndex, onRemove }) {
           dayIndex={dayIndex}
           exerciseIndex={exIndex}
           onRemove={() => remove(exIndex)}
+          onMoveUp={() => exIndex > 0 && move(exIndex, exIndex - 1)}
+          onMoveDown={() => exIndex < exerciseFields.length - 1 && move(exIndex, exIndex + 1)}
         />
       ))}
       <button type="button" onClick={() => append({
@@ -238,6 +279,8 @@ function TrainingDayCard({ control, dayIndex, onRemove }) {
   )
 }
 ```
+
+**React 19 gotcha:** Use `useWatch()` instead of `watch()` to observe field values in React 19. The `watch()` API has known re-render issues with React 19 where components stop re-rendering when form values change. `useFieldArray` fields are unaffected by this issue.
 
 ### Pattern 2: Immutable Plan Versioning (Slowly Changing Dimension)
 
@@ -294,8 +337,7 @@ CREATE TABLE workout_sessions (
   client_id UUID REFERENCES profiles(id) NOT NULL,
   training_day_id UUID REFERENCES training_days(id) NOT NULL,
   started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  completed_at TIMESTAMPTZ,
-  CONSTRAINT fk_session_client CHECK (true) -- RLS handles access
+  completed_at TIMESTAMPTZ
 );
 
 -- Individual set logs reference a specific plan_exercise (preserving exact prescription)
@@ -309,6 +351,15 @@ CREATE TABLE workout_sets (
   created_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(session_id, plan_exercise_id, set_number)
 );
+
+-- Performance indexes for RLS and common queries
+CREATE INDEX idx_training_plans_client_status ON training_plans(client_id, status);
+CREATE INDEX idx_training_days_plan_id ON training_days(plan_id);
+CREATE INDEX idx_plan_exercises_day_id ON plan_exercises(training_day_id);
+CREATE INDEX idx_workout_sessions_client_id ON workout_sessions(client_id);
+CREATE INDEX idx_workout_sessions_day_id ON workout_sessions(training_day_id);
+CREATE INDEX idx_workout_sessions_started_at ON workout_sessions(started_at);
+CREATE INDEX idx_workout_sets_session_id ON workout_sets(session_id);
 ```
 
 **Versioning workflow:**
@@ -335,7 +386,6 @@ DECLARE
   source_plan training_plans%ROWTYPE;
   day_record RECORD;
   new_day_id UUID;
-  ex_record RECORD;
 BEGIN
   -- Get source plan
   SELECT * INTO source_plan FROM training_plans WHERE id = source_plan_id;
@@ -373,13 +423,13 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 ### Pattern 3: Gym-Floor Workout Logging UI
 
-**What:** A mobile-optimized workout logging interface designed for one-thumb operation at the gym. Pre-fills prescribed values, uses large touch targets, and minimizes taps to log each set.
+**What:** A mobile-optimized workout logging interface designed for one-thumb operation at the gym. Pre-fills from last session's actual values (locked decision), uses large touch targets, and minimizes taps to log each set.
 
 **When to use:** WLOG-01, WLOG-02, WLOG-03
 
 **Key UX principles:**
 - Large touch targets: minimum 48px, primary actions 56px+
-- Pre-fill each set row with prescribed weight and reps
+- Pre-fill each set row with last session's actual values (falls back to prescribed if no history)
 - "Complete as prescribed" one-tap button per set
 - Number input with stepper buttons (+/- 2.5kg, +/- 1 rep) instead of free-text input
 - `inputMode="decimal"` for mobile keyboard when user taps the value directly
@@ -390,6 +440,21 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 **Example:**
 ```typescript
 // Workout set logging with pre-filled values and stepper controls
+// For use in a Vite SPA with React Hook Form
+
+import { useState } from "react"
+import { cn } from "@/lib/utils"
+import { Check, Save } from "lucide-react"
+
+interface SetRowProps {
+  setNumber: number
+  prescribedWeight: number
+  prescribedReps: number
+  lastSessionWeight: number | null  // Actual value from last session
+  lastSessionReps: number | null    // Actual value from last session
+  onLog: (data: { set_number: number; weight_kg: number; reps: number }) => void
+}
+
 function SetRow({
   setNumber,
   prescribedWeight,
@@ -398,6 +463,7 @@ function SetRow({
   lastSessionReps,
   onLog,
 }: SetRowProps) {
+  // Pre-fill priority: last session actual > prescribed (locked decision)
   const [weight, setWeight] = useState(lastSessionWeight ?? prescribedWeight)
   const [reps, setReps] = useState(lastSessionReps ?? prescribedReps)
   const [logged, setLogged] = useState(false)
@@ -481,7 +547,7 @@ function SetRow({
   )
 }
 
-// Parse decimal input accepting both comma and period
+// Parse decimal input accepting both comma and period (INFR-03)
 function parseDecimalInput(value: string): number {
   const normalized = value.replace(",", ".")
   const parsed = parseFloat(normalized)
@@ -491,7 +557,7 @@ function parseDecimalInput(value: string): number {
 
 ### Pattern 4: YouTube Lite Embed for Exercise Videos
 
-**What:** Use `react-lite-youtube-embed` instead of raw iframes to display exercise demonstration videos. Shows a lightweight thumbnail placeholder initially, loading the full YouTube player only when the user clicks play.
+**What:** Use `react-lite-youtube-embed` v3.5.x instead of raw iframes to display exercise demonstration videos. Shows a lightweight thumbnail placeholder initially, loading the full YouTube player only when the user clicks play.
 
 **When to use:** EXER-03
 
@@ -521,7 +587,7 @@ function ExerciseVideo({ youtubeUrl, exerciseName }: {
   )
 }
 
-// Robust YouTube URL parser
+// Robust YouTube URL parser -- handles 4+ URL formats users may paste
 function extractYouTubeVideoId(url: string): string | null {
   const patterns = [
     /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
@@ -539,13 +605,16 @@ function extractYouTubeVideoId(url: string): string | null {
 
 ### Pattern 5: RLS Policies for Trainer/Client Data Isolation
 
-**What:** Row Level Security policies that enforce: clients see only their own plans, sessions, and sets; trainer (single role) sees all client data.
+**What:** Row Level Security policies that enforce: clients see only their own plans, sessions, and sets; trainer (single role) sees all client data. Uses `(select auth.uid())` and `(select auth.jwt()->>'user_role')` wrapped in SELECT for RLS performance optimization.
 
 **When to use:** All Phase 2 tables
+
+**Critical RLS performance rule:** Always wrap `auth.uid()` and `auth.jwt()` calls in a SELECT subquery: `(select auth.uid())` instead of bare `auth.uid()`. This enables PostgreSQL's initPlan optimization to cache the result per-statement rather than calling per-row. Supabase docs confirm this can improve performance from 179ms to 9ms.
 
 **Example:**
 ```sql
 -- Source: Supabase RLS docs (supabase.com/docs/guides/database/postgres/row-level-security)
+-- + Supabase RLS performance best practices
 
 -- Enable RLS on all Phase 2 tables
 ALTER TABLE training_plans ENABLE ROW LEVEL SECURITY;
@@ -554,7 +623,14 @@ ALTER TABLE plan_exercises ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_sets ENABLE ROW LEVEL SECURITY;
 
--- TRAINING PLANS: Client sees own active plan; Trainer sees all
+-- Helper: check if current user is trainer (wraps JWT read in SELECT for caching)
+-- Use a security definer function to avoid RLS on the profiles join
+CREATE OR REPLACE FUNCTION is_trainer()
+RETURNS BOOLEAN AS $$
+  SELECT (select auth.jwt()->>'user_role') = 'trainer'
+$$ LANGUAGE sql STABLE SECURITY DEFINER;
+
+-- TRAINING PLANS: Client sees own plans; Trainer sees all
 CREATE POLICY "Clients view own plans"
   ON training_plans FOR SELECT TO authenticated
   USING (
@@ -563,18 +639,46 @@ CREATE POLICY "Clients view own plans"
 
 CREATE POLICY "Trainer views all plans"
   ON training_plans FOR SELECT TO authenticated
+  USING (is_trainer());
+
+CREATE POLICY "Trainer inserts plans"
+  ON training_plans FOR INSERT TO authenticated
+  WITH CHECK (is_trainer());
+
+CREATE POLICY "Trainer updates plans"
+  ON training_plans FOR UPDATE TO authenticated
+  USING (is_trainer())
+  WITH CHECK (is_trainer());
+
+-- TRAINING DAYS: Access through plan ownership
+CREATE POLICY "Clients view own training days"
+  ON training_days FOR SELECT TO authenticated
   USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'trainer')
+    plan_id IN (
+      SELECT id FROM training_plans WHERE client_id = (SELECT auth.uid())
+    )
   );
 
-CREATE POLICY "Trainer manages plans"
-  ON training_plans FOR ALL TO authenticated
+CREATE POLICY "Trainer manages training days"
+  ON training_days FOR ALL TO authenticated
+  USING (is_trainer())
+  WITH CHECK (is_trainer());
+
+-- PLAN EXERCISES: Access through training day -> plan ownership
+CREATE POLICY "Clients view own plan exercises"
+  ON plan_exercises FOR SELECT TO authenticated
   USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'trainer')
-  )
-  WITH CHECK (
-    EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'trainer')
+    training_day_id IN (
+      SELECT td.id FROM training_days td
+      JOIN training_plans tp ON td.plan_id = tp.id
+      WHERE tp.client_id = (SELECT auth.uid())
+    )
   );
+
+CREATE POLICY "Trainer manages plan exercises"
+  ON plan_exercises FOR ALL TO authenticated
+  USING (is_trainer())
+  WITH CHECK (is_trainer());
 
 -- WORKOUT SESSIONS: Client creates/views own; Trainer views all
 CREATE POLICY "Clients manage own sessions"
@@ -584,9 +688,7 @@ CREATE POLICY "Clients manage own sessions"
 
 CREATE POLICY "Trainer views all sessions"
   ON workout_sessions FOR SELECT TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'trainer')
-  );
+  USING (is_trainer());
 
 -- WORKOUT SETS: Access through session ownership
 CREATE POLICY "Clients manage own sets"
@@ -604,14 +706,12 @@ CREATE POLICY "Clients manage own sets"
 
 CREATE POLICY "Trainer views all sets"
   ON workout_sets FOR SELECT TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = (SELECT auth.uid()) AND role = 'trainer')
-  );
+  USING (is_trainer());
 ```
 
 ### Pattern 6: Dashboard Client Status Query
 
-**What:** A single efficient query that loads the trainer's client list with today's workout completion status, avoiding N+1 queries.
+**What:** A single efficient Supabase RPC function that loads the trainer's client list with today's workout completion status, avoiding N+1 queries.
 
 **When to use:** DASH-01, DASH-02
 
@@ -635,7 +735,7 @@ BEGIN
     p.full_name,
     p.email,
     CASE
-      WHEN p.activated_at IS NULL THEN 'pending'
+      WHEN p.is_active = false THEN 'pending'
       WHEN ws_recent.last_workout IS NULL THEN 'inactive'
       WHEN ws_recent.last_workout < now() - INTERVAL '7 days' THEN 'inactive'
       ELSE 'active'
@@ -662,31 +762,104 @@ BEGIN
     ORDER BY ws.started_at DESC
     LIMIT 1
   ) ws_today ON TRUE
-  WHERE p.role = 'client'
+  WHERE p.role = 'client'::user_role
   ORDER BY p.full_name;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
 
+**Calling from client (Vite SPA):**
+```typescript
+// src/features/dashboard/hooks/useDashboard.ts
+import { useQuery } from "@tanstack/react-query"
+import { supabase } from "@/lib/supabase"
+
+export function useClientDashboard() {
+  return useQuery({
+    queryKey: ["dashboard", "clients"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_client_dashboard")
+      if (error) throw error
+      return data
+    },
+    staleTime: 1000 * 60 * 2, // 2 minutes -- trainer doesn't need real-time
+  })
+}
+```
+
+### Pattern 7: Pre-fill from Last Session (Locked Decision)
+
+**What:** When a client starts a workout, each set row is pre-filled with values from the last completed session for the same training day and exercise. Falls back to prescribed values if no prior session exists.
+
+**When to use:** WLOG-01, WLOG-02
+
+**Example query:**
+```typescript
+// Fetch last session's actual values for pre-filling workout
+async function getLastSessionValues(
+  clientId: string,
+  trainingDayId: string
+): Promise<Map<string, { weight_kg: number; reps: number }[]>> {
+  const { data, error } = await supabase
+    .from("workout_sessions")
+    .select(`
+      workout_sets (
+        plan_exercise_id,
+        set_number,
+        weight_kg,
+        reps
+      )
+    `)
+    .eq("client_id", clientId)
+    .eq("training_day_id", trainingDayId)
+    .not("completed_at", "is", null)  // Only completed sessions
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .single()
+
+  if (error || !data) return new Map()
+
+  // Group sets by plan_exercise_id
+  const grouped = new Map<string, { weight_kg: number; reps: number }[]>()
+  for (const set of data.workout_sets) {
+    const existing = grouped.get(set.plan_exercise_id) || []
+    existing.push({ weight_kg: set.weight_kg, reps: set.reps })
+    grouped.set(set.plan_exercise_id, existing)
+  }
+
+  // Sort each exercise's sets by set_number
+  for (const [key, sets] of grouped) {
+    grouped.set(key, sets.sort((a, b) => a.set_number - b.set_number))
+  }
+
+  return grouped
+}
+```
+
 ### Anti-Patterns to Avoid
 
 - **Mutating active plans:** NEVER update `training_days` or `plan_exercises` on a plan with status='active'. Always create a new version. The unique constraint on `(client_id) WHERE status = 'active'` prevents accidental double-activation.
-- **Storing YouTube URLs as-is:** Always extract and store the video ID (11 chars). Parse URLs on input. This prevents URL format inconsistencies and simplifies thumbnail generation.
+- **Storing YouTube URLs as-is for display:** Always extract and validate the video ID (11 chars) on input. Parse URLs at storage time. This prevents URL format inconsistencies and simplifies thumbnail generation.
 - **Fetching all workout history at once:** Use date-range-bounded queries with pagination. Default to last 30 days for history views.
 - **Using Supabase Realtime for dashboard:** Adds WebSocket complexity for a dashboard viewed a few times per day. Use standard queries with TanStack Query's `staleTime` and `refetchOnWindowFocus`.
 - **Drag-and-drop for plan builder on v1:** Form-based add/remove/reorder is faster to build, works better on mobile, and covers 100% of the use case. Add DnD only if Javier specifically requests it.
+- **Bare `auth.uid()` in RLS policies:** Always wrap in `(SELECT auth.uid())` for the initPlan performance optimization. Same for `auth.jwt()`.
+- **Using `watch()` with React 19:** Use `useWatch()` instead. The `watch()` API has known re-render issues with React 19 where components stop updating when form values change.
+- **Server Actions / Server Components:** This is a Vite SPA, NOT Next.js. All data mutations go through Supabase JS client + TanStack Query mutations. There are no Server Actions.
 
 ## Don't Hand-Roll
 
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|-------------|-----|
 | Nested dynamic forms | Custom state management for plan builder arrays | React Hook Form `useFieldArray` (nested) | Handles add/remove/reorder/validate with minimal re-renders; manual state for 3-level nesting is bug-prone |
-| YouTube video embedding | Custom iframe with thumbnail detection and lazy loading | `react-lite-youtube-embed` | Handles thumbnail loading, click-to-play, privacy mode (nocookie), responsive sizing; 500KB savings per video vs raw iframe |
+| YouTube video embedding | Custom iframe with thumbnail detection and lazy loading | `react-lite-youtube-embed` v3.5.x | Handles thumbnail loading, click-to-play, privacy mode (nocookie), responsive sizing; 500KB savings per video vs raw iframe |
 | YouTube URL parsing | Simple regex for one URL format | Multi-pattern parser (see Pattern 4) | YouTube has 4+ URL formats (watch, youtu.be, embed, /v/); users paste any format |
 | Decimal input parsing (locale-aware) | Assume period-only decimal separator | Parser accepting both comma and period (see `parseDecimalInput`) | Spanish locale uses comma; English uses period; requirement INFR-03 mandates both |
 | Plan deep-copy for versioning | Manual INSERT statements per table in application code | Supabase RPC function (see Pattern 2) | Server-side function is atomic (no partial copies), faster (no round trips), and simpler to test |
 | Client status computation | Multiple queries per client to compute dashboard status | Single SQL function with LATERAL JOINs (see Pattern 6) | Avoids N+1 queries; computes status, today's workout, and last activity in one pass |
 | Role-based data isolation | Application-level `if (role === 'trainer')` checks | Supabase RLS policies | Database-level enforcement cannot be bypassed by frontend bugs; policies are the security boundary |
+| Form validation | Custom validation logic scattered across components | Zod 4 schemas shared between form and API layer | Single source of truth for validation rules; type inference; 6-14x faster than Zod 3 |
+| Date calculations | Manual date arithmetic | date-fns v4.1.x | Cycle length computation, session duration, "last 30 days" ranges; handles DST and timezone edge cases |
 
 **Key insight:** The plan builder and workout logger are nested data structures with complex state. React Hook Form's `useFieldArray` is purpose-built for exactly this shape. Hand-rolling state management for "plan -> days -> exercises" or "session -> exercises -> sets" creates a maintenance nightmare of array manipulation, validation synchronization, and re-render management.
 
@@ -707,7 +880,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 ### Pitfall 3: Workout Logging Too Many Taps on Mobile
 **What goes wrong:** Each set requires: tap weight input, open keyboard, type weight, close keyboard, tap reps input, open keyboard, type reps, close keyboard, tap save. That is 8+ interactions per set, times 3-5 sets, times 5+ exercises = 120+ interactions per workout.
 **Why it happens:** Developer builds a standard form and tests on desktop.
-**How to avoid:** Pre-fill with prescribed values (or last session's values). Add stepper buttons (+/- 2.5kg, +/- 1 rep) so the user adjusts rather than types from scratch. Add "complete as prescribed" one-tap action. Use `inputMode="decimal"` for weight and `inputMode="numeric"` for reps so the correct keyboard appears when tapping directly. Target: 1-3 taps per set when hitting prescribed values.
+**How to avoid:** Pre-fill with last session's actual values (locked decision). Add stepper buttons (+/- 2.5kg, +/- 1 rep) so the user adjusts rather than types from scratch. Add "complete as prescribed" one-tap action. Use `inputMode="decimal"` for weight and `inputMode="numeric"` for reps so the correct keyboard appears when tapping directly. Target: 1-3 taps per set when hitting prescribed values.
 **Warning signs:** Count taps from opening a workout to logging all sets. If total exceeds 3 * (total sets), iterate.
 
 ### Pitfall 4: Training Day Display Not Matching Client Mental Model
@@ -728,6 +901,18 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 **How to avoid:** Fetch the complete training day data in one query: join `training_days` -> `plan_exercises` -> `exercises` to get all exercise names, video IDs, and prescriptions in a single request. Use TanStack Query to cache this aggressively since plan data rarely changes mid-cycle.
 **Warning signs:** Workout page shows loading spinners per exercise instead of loading all at once.
 
+### Pitfall 7: Using watch() Instead of useWatch() in React 19
+**What goes wrong:** Form components stop re-rendering when form values change. The UI appears frozen or shows stale values.
+**Why it happens:** React Hook Form's `watch()` API has a known incompatibility with React 19's rendering behavior. Components that rely on `watch()` to observe form values may not re-render when those values change.
+**How to avoid:** Use `useWatch()` hook instead of `watch()` throughout the application. `useWatch()` isolates re-rendering at the hook level and works correctly with React 19.
+**Warning signs:** Form fields not updating visually when other fields change, especially in dependent field scenarios.
+
+### Pitfall 8: RLS Performance with Nested Table Access
+**What goes wrong:** RLS policies on `workout_sets` that join through `workout_sessions` to check `client_id` run slowly because the join triggers RLS on the joined table too.
+**Why it happens:** PostgreSQL applies RLS policies to joined tables unless bypassed with SECURITY DEFINER functions.
+**How to avoid:** Use `IN (SELECT ...)` subqueries rather than JOINs in RLS policies. For complex chains, create SECURITY DEFINER helper functions. Always wrap `auth.uid()` and `auth.jwt()` in `(SELECT ...)` for initPlan optimization. Index all columns referenced in RLS policies.
+**Warning signs:** Slow queries on `workout_sets` despite small data volumes. Check with `EXPLAIN ANALYZE`.
+
 ## Code Examples
 
 Verified patterns from official sources:
@@ -735,10 +920,10 @@ Verified patterns from official sources:
 ### TanStack Query Optimistic Update for Set Logging
 ```typescript
 // Source: TanStack Query docs (tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates)
-// Adapted for workout set logging
+// Adapted for Vite SPA workout set logging
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { supabase } from "@/lib/supabase/client"
+import { supabase } from "@/lib/supabase"
 
 function useLogSet(sessionId: string) {
   const queryClient = useQueryClient()
@@ -799,6 +984,9 @@ function useLogSet(sessionId: string) {
 ### Supabase Query for Client's Active Plan with Exercises
 ```typescript
 // Fetch the complete active plan for a client in one query
+// Used in Vite SPA via TanStack Query
+import { supabase } from "@/lib/supabase"
+
 async function getActiveTrainingPlan(clientId: string) {
   const { data, error } = await supabase
     .from("training_plans")
@@ -842,17 +1030,15 @@ async function getActiveTrainingPlan(clientId: string) {
 }
 ```
 
-### Workout Session with Duration Tracking
+### Workout Session Start and Complete (Vite SPA)
 ```typescript
-// Server Action to start a workout session
-"use server"
+// Workout session management via Supabase client
+// No Server Actions -- this is a Vite SPA
 
-import { createClient } from "@/lib/supabase/server"
+import { supabase } from "@/lib/supabase"
 
 export async function startWorkoutSession(trainingDayId: string) {
-  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) throw new Error("Not authenticated")
 
   const { data, error } = await supabase
@@ -870,8 +1056,6 @@ export async function startWorkoutSession(trainingDayId: string) {
 }
 
 export async function completeWorkoutSession(sessionId: string) {
-  const supabase = await createClient()
-
   const { data, error } = await supabase
     .from("workout_sessions")
     .update({ completed_at: new Date().toISOString() })
@@ -909,6 +1093,40 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
 
+### TanStack Query Key Factory Pattern
+```typescript
+// src/features/plans/hooks/usePlans.ts
+// Consistent query key structure for cache management
+
+import { useQuery } from "@tanstack/react-query"
+import { supabase } from "@/lib/supabase"
+
+export const planKeys = {
+  all: ["plans"] as const,
+  lists: () => [...planKeys.all, "list"] as const,
+  list: (clientId: string) => [...planKeys.all, "list", clientId] as const,
+  details: () => [...planKeys.all, "detail"] as const,
+  detail: (planId: string) => [...planKeys.all, "detail", planId] as const,
+  active: (clientId: string) => [...planKeys.all, "active", clientId] as const,
+}
+
+export const workoutKeys = {
+  all: ["workouts"] as const,
+  sessions: (clientId: string) => [...workoutKeys.all, "sessions", clientId] as const,
+  session: (sessionId: string) => [...workoutKeys.all, "session", sessionId] as const,
+  sets: (sessionId: string) => [...workoutKeys.all, "sets", sessionId] as const,
+  lastSession: (clientId: string, dayId: string) =>
+    [...workoutKeys.all, "last", clientId, dayId] as const,
+  history: (clientId: string) => [...workoutKeys.all, "history", clientId] as const,
+}
+
+export const dashboardKeys = {
+  all: ["dashboard"] as const,
+  clients: () => [...dashboardKeys.all, "clients"] as const,
+  clientDetail: (clientId: string) => [...dashboardKeys.all, "client", clientId] as const,
+}
+```
+
 ## State of the Art
 
 | Old Approach | Current Approach | When Changed | Impact |
@@ -918,12 +1136,21 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 | Custom real-time polling | TanStack Query staleTime + refetchOnWindowFocus | 2022+ (React Query v4/v5) | Automatic background sync without WebSocket complexity |
 | Mutable plans with audit logs | Immutable plan versions (SCD pattern) | Established pattern | Historical data integrity guaranteed by data model, not application code |
 | Application-level auth checks | Database-level RLS policies | Supabase mainstream adoption 2022+ | Security enforced at data layer, cannot be bypassed by frontend bugs |
-| React Hook Form v6 register ref pattern | RHF v7+ Controller/useFieldArray pattern | 2021 (RHF v7) | Better TypeScript support, simpler nested forms |
+| Zod 3 (z.object, z.string().email()) | Zod 4 (z.object, z.email() as top-level) | July 2025 (Zod 4.0.0) | 6-14x faster parsing, 57% smaller bundle, 10x faster TS compilation |
+| @hookform/resolvers v3 (Zod 3 only) | @hookform/resolvers v5 (Zod 3 + Zod 4) | 2025 | Auto-detects Zod version; supports both v3 and v4 |
+| RHF watch() for reactive fields | RHF useWatch() for React 19 | 2024-2025 (React 19 release) | watch() has re-render issues in React 19; useWatch() isolates re-renders correctly |
+| date-fns v3 (separate tz package) | date-fns v4 (built-in timezone support) | 2024-2025 | First-class timezone support via TZDate and tz helper; no separate @date-fns/tz needed |
+| Bare auth.uid() in RLS | (SELECT auth.uid()) wrapped | Supabase best practices 2024+ | initPlan caching optimization: 179ms -> 9ms per query |
 
 **Deprecated/outdated:**
 - **react-youtube** (npm): Full YouTube IFrame API wrapper. Overkill for simple embed/playback. Use `react-lite-youtube-embed` unless programmatic player control is needed.
 - **Formik**: Higher re-render overhead compared to React Hook Form for forms with frequent updates (like rapid set logging). RHF is the current standard.
 - **Event sourcing for plan versioning at this scale**: Massive over-engineering. SCD (version + status columns) achieves the same result with standard SQL.
+- **Zod 3 for new projects**: Zod 4 is now the default on npm. New projects should use `import { z } from "zod"` which gives Zod 4. Zod 3 available at `"zod/v3"` for legacy code.
+- **Next.js / Server Components for this app**: Phase 1 research correctly chose Vite SPA for this scale (single trainer, 20-50 clients). No SSR needed. Do not introduce Next.js.
+- **`z.string().email()` in Zod 4**: Use `z.email()` as a top-level validator instead. `.email()` method on strings is deprecated in Zod 4.
+- **`.strict()` and `.passthrough()` in Zod 4**: Use `z.strictObject()` and `z.looseObject()` functions instead.
+- **`.merge()` in Zod 4**: Use `.extend()` instead.
 
 ## Open Questions
 
@@ -946,31 +1173,48 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 ### Primary (HIGH confidence)
 - [React Hook Form useFieldArray docs](https://react-hook-form.com/docs/usefieldarray) - Nested field array API, rules, and patterns
+- [React Hook Form useWatch docs](https://react-hook-form.com/docs/usewatch) - Reactive form value observation for React 19
 - [Supabase RLS docs](https://supabase.com/docs/guides/database/postgres/row-level-security) - Policy creation, auth.uid(), role-based patterns
-- [Supabase Realtime docs](https://supabase.com/docs/guides/realtime/subscribing-to-database-changes) - Database change subscriptions, confirmed polling is sufficient alternative
+- [Supabase RLS performance best practices](https://supabase.com/docs/guides/troubleshooting/rls-performance-and-best-practices-Z5Jjwv) - initPlan caching, SELECT wrapping, security definer functions
 - [Supabase RPC docs](https://supabase.com/docs/reference/javascript/rpc) - Calling PostgreSQL functions from client
-- [shadcn/ui Form docs](https://ui.shadcn.com/docs/forms/react-hook-form) - React Hook Form + Zod integration pattern
 - [TanStack Query optimistic updates](https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates) - onMutate/onError/onSettled pattern
+- [Zod 4 release notes](https://zod.dev/v4) - Performance improvements, API changes, bundle size
+- [Zod 4 migration guide](https://zod.dev/v4/changelog) - Breaking changes from Zod 3 to Zod 4
+- [Zod 4 versioning](https://zod.dev/v4/versioning) - Import paths, npm distribution model
+- npm registry verified versions: react-hook-form 7.71.2, zod 4.3.6, @hookform/resolvers 5.2.2, react-lite-youtube-embed 3.5.0, date-fns 4.1.0, @tanstack/react-query 5.90.21, lucide-react 0.575.0, @supabase/supabase-js 2.97.0
 
 ### Secondary (MEDIUM confidence)
-- [react-lite-youtube-embed](https://github.com/ibrahimcesar/react-lite-youtube-embed) - v2.4+, ~500KB savings confirmed by multiple sources including [Next.js Adventures performance analysis](https://buhalbu.com/nextjs/articles/next-js-adventures-embedded-youtube-videos) and [Francisco Moretti's Next.js guide](https://www.franciscomoretti.com/blog/use-a-lite-youtube-embedded-player-in-nextjs)
-- [CSS-Tricks inputMode guide](https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/) - inputMode="decimal" for mobile keyboards
-- [PostgreSQL immutable store patterns](https://kevinmahoney.co.uk/articles/immutable-data/) - Slowly Changing Dimension approach for versioned records
-- [Supabase + TanStack Query integration](https://makerkit.dev/blog/saas/supabase-react-query) - Practical patterns for caching and mutations
+- [react-lite-youtube-embed GitHub](https://github.com/ibrahimcesar/react-lite-youtube-embed) - v3.5.0, peer dep React >=18.2.0 (React 19 compatible), ~500KB savings confirmed by multiple sources
+- [React Hook Form React 19 compatibility discussion](https://github.com/orgs/react-hook-form/discussions/11832) - Known watch() issue, useWatch() workaround
+- [The Invisible Form Bug: React 19 + React Hook Form](https://www.buildwithmatija.com/blog/the-invisible-form-bug-react-19-react-hook-form-s-hidden-compatibility-issue) - Detailed analysis of watch() re-render issue
+- [Zod 4 + @hookform/resolvers compatibility issue](https://github.com/colinhacks/zod/issues/4992) - Confirmed working with @hookform/resolvers v5+
+- [Supabase RLS using Security Definers](https://blog.entrostat.com/supabase-rls-functions/) - Pattern for SECURITY DEFINER helper functions
+- [date-fns v4 announcement](https://blog.date-fns.org/v40-with-time-zone-support/) - First-class timezone support, minimal breaking changes
 
 ### Tertiary (LOW confidence)
-- Exact react-lite-youtube-embed version (listed as 3.5.0 on npm search results, but verify with `npm view react-lite-youtube-embed version` before installing)
-- Mobile workout UX patterns from open-source fitness apps on GitHub - patterns vary widely, principles are consistent
+- React Hook Form v8 beta status - In beta only; do not use for production; v7.71.x is latest stable
+- Mobile workout UX patterns from open-source fitness apps on GitHub - Patterns vary widely, principles are consistent
 
 ## Metadata
 
 **Confidence breakdown:**
-- Standard stack: HIGH - All libraries from Phase 1 project research, well-documented, verified through official docs
-- Architecture (plan versioning): HIGH - SCD pattern is a well-established database pattern, PostgreSQL constraints enforce it, tested with Supabase RLS
-- Architecture (plan builder UI): HIGH - React Hook Form useFieldArray is specifically designed for this pattern, verified in official docs
+- Standard stack: HIGH - All libraries verified via npm with exact versions; Phase 1 foundation confirmed as Vite SPA (NOT Next.js)
+- Architecture (plan versioning): HIGH - SCD pattern is a well-established database pattern; PostgreSQL constraints enforce it; tested with Supabase RLS
+- Architecture (plan builder UI): HIGH - React Hook Form useFieldArray is specifically designed for this pattern; verified in official docs; React 19 compatibility confirmed with useWatch() workaround
 - Architecture (workout logging UX): MEDIUM - UX principles are well-established (large touch targets, pre-fill, steppers) but specific implementation needs real-device testing
-- Pitfalls: HIGH - All pitfalls verified against project research PITFALLS.md and corroborated by database design principles
+- Pitfalls: HIGH - All pitfalls verified against official docs; React 19 watch() issue confirmed by multiple sources; RLS performance patterns from official Supabase docs
 - Dashboard patterns: MEDIUM - SQL query approach is standard but exact query optimization depends on Phase 1 schema decisions
+- Zod 4 integration: HIGH - Confirmed working with @hookform/resolvers v5+; migration path documented; import path verified
+
+**Key corrections from prior research:**
+1. **Architecture:** Changed from Next.js 15 (App Router, Server Components, Server Actions) to Vite SPA (React 19, React Router v7, TanStack Query + Supabase client). This aligns with Phase 1 decisions.
+2. **Zod version:** Changed from Zod ^3.x to Zod 4.3.x. Zod 4 is now the npm default (since July 2025).
+3. **@hookform/resolvers:** Changed from ^3.x to 5.2.x (supports Zod 4 natively).
+4. **date-fns:** Changed from ^3.x to 4.1.x (v4 adds built-in timezone support).
+5. **react-lite-youtube-embed:** Updated from ^2.4+ to 3.5.x (current version).
+6. **RLS patterns:** Added `(SELECT auth.uid())` wrapping and SECURITY DEFINER helper function for performance optimization.
+7. **React 19 pitfall:** Added useWatch() vs watch() compatibility issue.
+8. **Added user constraints section** (required by format, was missing).
 
 **Research date:** 2026-02-23
 **Valid until:** 2026-03-23 (30 days -- stable domain, no fast-moving dependencies)
