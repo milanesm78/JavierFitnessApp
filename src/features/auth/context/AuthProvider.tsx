@@ -27,7 +27,7 @@ async function fetchActivationStatus(userId: string): Promise<boolean | null> {
       .from("profiles")
       .select("is_active")
       .eq("id", userId)
-      .single<{ is_active: boolean }>();
+      .single();
 
     if (error || !data) return null;
     return data.is_active;
