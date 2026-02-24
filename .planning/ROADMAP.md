@@ -29,12 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Trainer can create, edit, and delete exercises with name and YouTube video link
   4. User can toggle between Spanish and English and the entire interface updates accordingly
   5. All pages are usable on a mobile phone browser without horizontal scrolling, and weight inputs accept both comma and period as decimal separators
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md — Project scaffold, Supabase schema, i18n, Tailwind + shadcn/ui, utilities
+- [ ] 01-02-PLAN.md — Auth system, role-based routing, portal layouts, theme toggle, client activation
+- [ ] 01-03-PLAN.md — Exercise library CRUD, DecimalInput component, end-to-end verification
 
 ### Phase 2: Core Training Loop
 **Goal**: Trainer can build personalized training plans and clients can view their workouts, watch exercise videos, and log every set at the gym -- the complete daily training workflow
