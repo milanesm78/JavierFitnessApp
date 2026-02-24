@@ -46,13 +46,13 @@ Plans:
   3. Client can view their plan grouped by training day, tap an exercise to watch its YouTube video inline, start a workout session, and log weight and reps for each set
   4. Client can view their workout history showing past sessions with all logged sets and session duration
   5. Trainer can view a list of all clients with activity status, see color-coded indicators for today's workout completion, and drill into any client's plan and logs
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
-- [ ] 02-04: TBD
+- [ ] 02-01-PLAN.md — Database schema, types, Zod schemas, query hooks, shared utilities (Phase 2 data layer)
+- [ ] 02-02-PLAN.md — Training plan builder with nested form, exercise picker, versioning, trainer pages
+- [ ] 02-03-PLAN.md — Client plan view, YouTube exercise embed, workout session logging with pre-fill and steppers
+- [ ] 02-04-PLAN.md — Workout history, trainer dashboard with client status indicators, end-to-end verification
 
 ### Phase 3: Measurements and Progress
 **Goal**: Clients and trainer can track body composition over time and visualize strength and measurement progress through charts
