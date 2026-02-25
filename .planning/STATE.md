@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 Phase: 1 of 4 (Foundation and Exercise Library)
 Plan: 2 of 3 in current phase
 Status: Executing
-Last activity: 2026-02-24 -- Completed 01-02-PLAN.md
+Last activity: 2026-02-24 - Completed quick task 1: connect project to supabase
 
 Progress: [██░░░░░░░░] 20%
 
@@ -68,6 +68,12 @@ None yet.
 - ~~[01-01]: Supabase project must be created and .env.local configured before auth features will fully work~~ **RESOLVED** (quick-1, 2026-02-25)
 - [Research]: Anthropometric measurement ranges should be confirmed with Javier before Phase 3
 - [Research]: Auto-progression rule specifics (which sets count, session threshold, fixed vs variable increment) must be clarified with Javier before Phase 4
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | connect project to supabase | 2026-02-24 | be457a5 | [1-connect-project-to-supabase](./quick/1-connect-project-to-supabase/) |
 
 ## Session Continuity
 
