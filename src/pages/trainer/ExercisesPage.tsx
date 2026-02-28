@@ -16,7 +16,7 @@ import {
   useUpdateExercise,
   useDeleteExercise,
 } from "@/features/exercises/hooks/useExercises";
-import type { Exercise } from "@/features/exercises/types";
+import type { Exercise, ExerciseFormData } from "@/features/exercises/types";
 
 export function ExercisesPage() {
   const { t } = useTranslation();
@@ -51,7 +51,7 @@ export function ExercisesPage() {
     setDeleteDialogOpen(true);
   }
 
-  function handleFormSubmit(data: { name: string; youtube_url: string }) {
+  function handleFormSubmit(data: ExerciseFormData) {
     if (editingExercise) {
       updateExercise.mutate(
         { id: editingExercise.id, updates: data },

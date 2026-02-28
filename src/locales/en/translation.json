@@ -69,7 +69,11 @@
     "update_success": "Exercise updated successfully",
     "update_error": "Failed to update exercise",
     "delete_success": "Exercise deleted successfully",
-    "delete_error": "Failed to delete exercise"
+    "delete_error": "Failed to delete exercise",
+    "description": "Description",
+    "description_placeholder": "e.g. 4 sets of 8 reps, controlled eccentric",
+    "default_weight": "Default weight (kg)",
+    "default_weight_placeholder": "e.g. 60"
   },
   "plans": {
     "createPlan": "Create Plan",

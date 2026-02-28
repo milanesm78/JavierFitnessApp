@@ -30,9 +30,17 @@ export function useCreateExercise() {
 
   return useMutation({
     mutationFn: async (exercise: ExerciseFormData) => {
+      const payload = {
+        name: exercise.name,
+        youtube_url: exercise.youtube_url,
+        description: exercise.description || null,
+        default_weight_kg: exercise.default_weight_kg
+          ? parseFloat(exercise.default_weight_kg.replace(",", "."))
+          : null,
+      };
       const { data, error } = await supabase
         .from("exercises")
-        .insert(exercise)
+        .insert(payload)
         .select()
         .single();
       if (error) throw error;
@@ -60,9 +68,17 @@ export function useUpdateExercise() {
       id: string;
       updates: ExerciseFormData;
     }) => {
+      const payload = {
+        name: updates.name,
+        youtube_url: updates.youtube_url,
+        description: updates.description || null,
+        default_weight_kg: updates.default_weight_kg
+          ? parseFloat(updates.default_weight_kg.replace(",", "."))
+          : null,
+      };
       const { data, error } = await supabase
         .from("exercises")
-        .update(updates)
+        .update(payload)
         .eq("id", id)
         .select()
         .single();

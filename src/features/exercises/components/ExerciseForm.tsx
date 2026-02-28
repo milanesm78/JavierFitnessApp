@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { DecimalInput } from "@/components/DecimalInput";
 import type { Exercise, ExerciseFormData } from "../types";
 
 /**
@@ -71,6 +73,10 @@ export function ExerciseForm({
   const { t } = useTranslation();
   const [name, setName] = useState(exercise?.name ?? "");
   const [youtubeUrl, setYoutubeUrl] = useState(exercise?.youtube_url ?? "");
+  const [description, setDescription] = useState(exercise?.description ?? "");
+  const [defaultWeight, setDefaultWeight] = useState<number | null>(
+    exercise?.default_weight_kg ?? null
+  );
   const [errors, setErrors] = useState<{ name?: string; youtube_url?: string }>(
     {}
   );
@@ -79,6 +85,8 @@ export function ExerciseForm({
     if (exercise) {
       setName(exercise.name);
       setYoutubeUrl(exercise.youtube_url);
+      setDescription(exercise.description ?? "");
+      setDefaultWeight(exercise.default_weight_kg ?? null);
     }
   }, [exercise]);
 
@@ -101,7 +109,12 @@ export function ExerciseForm({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
-    onSubmit({ name: name.trim(), youtube_url: youtubeUrl.trim() });
+    onSubmit({
+      name: name.trim(),
+      youtube_url: youtubeUrl.trim(),
+      description: description.trim(),
+      default_weight_kg: defaultWeight !== null ? String(defaultWeight) : "",
+    });
   }
 
   return (
@@ -142,6 +155,31 @@ export function ExerciseForm({
         {errors.youtube_url && (
           <p className="text-sm text-destructive">{errors.youtube_url}</p>
         )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="exercise-description">{t("exercises.description")}</Label>
+        <Textarea
+          id="exercise-description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder={t("exercises.description_placeholder")}
+          className="min-h-[80px]"
+          disabled={isLoading}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="exercise-default-weight">
+          {t("exercises.default_weight")}
+        </Label>
+        <DecimalInput
+          id="exercise-default-weight"
+          value={defaultWeight}
+          onChange={setDefaultWeight}
+          placeholder={t("exercises.default_weight_placeholder")}
+          disabled={isLoading}
+        />
       </div>
 
       {/* YouTube thumbnail preview */}

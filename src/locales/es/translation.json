@@ -69,7 +69,11 @@
     "update_success": "Ejercicio actualizado exitosamente",
     "update_error": "Error al actualizar el ejercicio",
     "delete_success": "Ejercicio eliminado exitosamente",
-    "delete_error": "Error al eliminar el ejercicio"
+    "delete_error": "Error al eliminar el ejercicio",
+    "description": "Descripcion",
+    "description_placeholder": "ej. 4 series de 8 reps, excentrica controlada",
+    "default_weight": "Peso por defecto (kg)",
+    "default_weight_placeholder": "ej. 60"
   },
   "plans": {
     "createPlan": "Crear Plan",
