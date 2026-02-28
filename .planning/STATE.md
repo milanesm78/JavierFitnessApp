@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Clients always have their personalized training plan at their fingertips -- with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
-**Current focus:** Phase 2: Core Training Loop
+**Current focus:** Phase 3: Measurements and Progress
 
 ## Current Position
 
-Phase: 2 of 4 (Core Training Loop)
-Plan: 3 of 4 in current phase
+Phase: 3 of 4 (Measurements and Progress)
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-02-28 - Completed 01-04 (Exercise fields gap closure + delete button fix)
+Last activity: 2026-02-28 - Completed 03-01 (Body measurement data layer and wizard form)
 
-Progress: [██████░░░░] 55%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 12min
-- Total execution time: ~82min
+- Total execution time: ~92min
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [██████░░░░] 55%
 |-------|-------|-------|----------|
 | 1 | 4 | ~41min | 10min |
 | 2 | 2 | 31min | 16min |
+| 3 | 1 | 10min | 10min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (~3min verification), 02-01 (9min), 02-03 (22min), 01-04 (6min)
+- Last 5 plans: 02-01 (9min), 02-03 (22min), 01-04 (6min), 03-01 (10min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -80,6 +81,9 @@ Recent decisions affecting current work:
 - [Phase 02]: [02-02]: Day/exercise orders normalized to sequential values on form submit, not during editing
 - [01-04]: DecimalInput used with number|null interface for default weight, string-to-number conversion in mutation layer
 - [01-04]: Form data uses string types for numeric fields; mutation layer converts to DB-native types before insert/update
+- [03-01]: Migration file numbered 00004 (not 00003 as plan suggested) because 00003 already exists
+- [03-01]: Zod schema uses z.union([z.number(), z.null()]) to avoid react-hook-form type mismatch with Zod v4
+- [03-01]: MEASUREMENT_FIELDS constant organizes field metadata by category for data-driven form rendering
 
 ### Pending Todos
 
@@ -101,5 +105,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 01-04-PLAN.md (gap closure)
-Resume file: .planning/phases/01-foundation-and-exercise-library/01-04-SUMMARY.md
+Stopped at: Completed 03-01-PLAN.md (Body measurement data layer and wizard form)
+Resume file: .planning/phases/03-measurements-and-progress/03-01-SUMMARY.md

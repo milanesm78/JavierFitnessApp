@@ -44,8 +44,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Body Measurements
 
-- [ ] **BODY-01**: Client can fill monthly body measurement form with full anthropometric protocol (weight, height, skin folds, bone diameters, circumferences)
-- [ ] **BODY-02**: Measurement form validates input ranges to prevent data entry errors
+- [x] **BODY-01**: Client can fill monthly body measurement form with full anthropometric protocol (weight, height, skin folds, bone diameters, circumferences)
+- [x] **BODY-02**: Measurement form validates input ranges to prevent data entry errors
 - [ ] **BODY-03**: Client and trainer can view measurement history
 
 ### Progress Tracking
@@ -123,8 +123,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WLOG-04 | Phase 2 | Complete |
 | PROG-01 | Phase 4 | Pending |
 | PROG-02 | Phase 4 | Pending |
-| BODY-01 | Phase 3 | Pending |
-| BODY-02 | Phase 3 | Pending |
+| BODY-01 | Phase 3 | Complete |
+| BODY-02 | Phase 3 | Complete |
 | BODY-03 | Phase 3 | Pending |
 | TRCK-01 | Phase 3 | Pending |
 | TRCK-02 | Phase 3 | Pending |
