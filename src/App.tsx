@@ -7,9 +7,13 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 // Pages
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
-import { TrainerDashboard } from "@/pages/trainer/TrainerDashboard";
+import { ClientsPage } from "@/pages/trainer/ClientsPage";
+import { ClientPlanPage } from "@/pages/trainer/ClientPlanPage";
+import { PlanEditPage } from "@/pages/trainer/PlanEditPage";
 import { ExercisesPage } from "@/pages/trainer/ExercisesPage";
 import { ClientHome } from "@/pages/client/ClientHome";
+import { MyPlanPage } from "@/pages/client/MyPlanPage";
+import { WorkoutPage } from "@/pages/client/WorkoutPage";
 import { PendingActivationPage } from "@/pages/client/PendingActivationPage";
 
 // Layouts
@@ -58,7 +62,11 @@ function App() {
           element={<ProtectedRoute allowedRoles={["trainer"]} />}
         >
           <Route element={<TrainerLayout />}>
-            <Route path="/trainer" element={<TrainerDashboard />} />
+            <Route path="/trainer" element={<Navigate to="/trainer/clients" replace />} />
+            <Route path="/trainer/clients" element={<ClientsPage />} />
+            <Route path="/trainer/clients/:clientId" element={<ClientPlanPage />} />
+            <Route path="/trainer/clients/:clientId/plan/new" element={<PlanEditPage />} />
+            <Route path="/trainer/clients/:clientId/plan/:planId/edit" element={<PlanEditPage />} />
             <Route path="/trainer/exercises" element={<ExercisesPage />} />
           </Route>
         </Route>

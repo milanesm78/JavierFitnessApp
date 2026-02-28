@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
-import { LayoutDashboard, Dumbbell, LogOut } from "lucide-react";
+import { Users, Dumbbell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -12,10 +12,10 @@ export function TrainerLayout() {
 
   const navItems = [
     {
-      to: "/trainer",
-      icon: LayoutDashboard,
-      label: t("nav.dashboard"),
-      end: true,
+      to: "/trainer/clients",
+      icon: Users,
+      label: t("nav.clients"),
+      end: false,
     },
     {
       to: "/trainer/exercises",

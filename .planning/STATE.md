@@ -85,9 +85,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | connect project to supabase | 2026-02-24 | be457a5 | [1-connect-project-to-supabase](./quick/1-connect-project-to-supabase/) |
+| 3 | post-registration navigation to role portal | 2026-02-28 | f8f4c75 | [3-when-an-account-is-created-log-the-user-](./quick/3-when-an-account-is-created-log-the-user-/) |
 
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-core-training-loop/02-01-SUMMARY.md
+Stopped at: Completed quick task 3 (post-registration navigation)
+Resume file: .planning/quick/3-when-an-account-is-created-log-the-user-/3-SUMMARY.md
