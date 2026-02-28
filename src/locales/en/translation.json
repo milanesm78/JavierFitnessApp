@@ -262,10 +262,26 @@
     "circ_hip": "Hip",
     "circ_thigh": "Thigh",
     "circ_calf": "Calf",
+    "history": "History",
+    "details": "Details",
+    "change": "Change",
+    "notes": "Notes",
+    "fieldsRecorded": "{{skinFolds}} skin folds, {{diameters}} diameters, {{circumferences}} circumferences",
     "validation": {
       "min": "Minimum value is {{min}}",
       "max": "Maximum value is {{max}}",
       "required": "This field is required"
     }
+  },
+  "progress": {
+    "title": "My Progress",
+    "strength": "Strength",
+    "body": "Body",
+    "selectExercise": "Select exercise",
+    "selectMeasurement": "Select measurement",
+    "needMoreData": "Need at least 2 data points to show a chart. Keep logging!",
+    "maxWeight": "Max Weight",
+    "noMeasurements": "No measurements recorded yet",
+    "measurementCount": "{{count}} measurements"
   }
 }

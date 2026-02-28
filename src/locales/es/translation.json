@@ -262,10 +262,26 @@
     "circ_hip": "Cadera",
     "circ_thigh": "Muslo",
     "circ_calf": "Pantorrilla",
+    "history": "Historial",
+    "details": "Detalles",
+    "change": "Cambio",
+    "notes": "Notas",
+    "fieldsRecorded": "{{skinFolds}} pliegues, {{diameters}} diametros, {{circumferences}} circunferencias",
     "validation": {
       "min": "El valor minimo es {{min}}",
       "max": "El valor maximo es {{max}}",
       "required": "Este campo es obligatorio"
     }
+  },
+  "progress": {
+    "title": "Mi Progreso",
+    "strength": "Fuerza",
+    "body": "Cuerpo",
+    "selectExercise": "Seleccionar ejercicio",
+    "selectMeasurement": "Seleccionar medida",
+    "needMoreData": "Se necesitan al menos 2 registros para mostrar un grafico. Sigue registrando!",
+    "maxWeight": "Peso Maximo",
+    "noMeasurements": "No hay mediciones registradas",
+    "measurementCount": "{{count}} mediciones"
   }
 }
