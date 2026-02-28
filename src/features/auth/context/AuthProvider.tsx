@@ -12,27 +12,57 @@ import type { AuthContextValue, UserRole } from "../types";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+const VALID_ROLES: ReadonlySet<string> = new Set(["trainer", "client"]);
+
+function isValidRole(value: unknown): value is UserRole {
+  return typeof value === "string" && VALID_ROLES.has(value);
+}
+
+/**
+ * Resolve the user role using a multi-tier fallback strategy:
+ *
+ * 1. JWT custom claim `user_role` (injected by custom_access_token_hook) -- instant, no network
+ * 2. Supabase user_metadata.role (set during signUp via options.data) -- instant, no network
+ * 3. profiles table lookup (always has the role from handle_new_user trigger) -- requires DB query
+ *
+ * This ensures login works whether or not the custom_access_token_hook
+ * is enabled on the hosted Supabase project.
+ */
 function decodeRoleFromJwt(accessToken: string): UserRole | null {
   try {
     const payload = JSON.parse(atob(accessToken.split(".")[1]));
-    return (payload.user_role as UserRole) ?? null;
+    if (isValidRole(payload.user_role)) return payload.user_role;
   } catch {
-    return null;
+    // Fall through to return null
   }
+  return null;
 }
 
-async function fetchActivationStatus(userId: string): Promise<boolean | null> {
+function getRoleFromMetadata(user: User): UserRole | null {
+  const metaRole = user.user_metadata?.role;
+  return isValidRole(metaRole) ? metaRole : null;
+}
+
+interface ProfileData {
+  role: UserRole | null;
+  isActive: boolean | null;
+}
+
+async function fetchProfile(userId: string): Promise<ProfileData> {
   try {
     const { data, error } = await supabase
       .from("profiles")
-      .select("is_active")
+      .select("role, is_active")
       .eq("id", userId)
       .single();
 
-    if (error || !data) return null;
-    return data.is_active;
+    if (error || !data) return { role: null, isActive: null };
+    return {
+      role: isValidRole(data.role) ? data.role : null,
+      isActive: data.is_active,
+    };
   } catch {
-    return null;
+    return { role: null, isActive: null };
   }
 }
 
@@ -49,11 +79,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (newSession?.user) {
       setUser(newSession.user);
 
-      const role = decodeRoleFromJwt(newSession.access_token);
-      setUserRole(role);
+      // Multi-tier role resolution: JWT claim -> user_metadata -> profiles table
+      let role = decodeRoleFromJwt(newSession.access_token);
+      if (!role) {
+        role = getRoleFromMetadata(newSession.user);
+      }
 
-      const activeStatus = await fetchActivationStatus(newSession.user.id);
-      setIsActive(activeStatus);
+      // Always fetch the profile for is_active status.
+      // If role is still null, the profile query also resolves it (tier 3).
+      const profile = await fetchProfile(newSession.user.id);
+      if (!role) {
+        role = profile.role;
+      }
+
+      setUserRole(role);
+      setIsActive(profile.isActive);
     } else {
       setUser(null);
       setUserRole(null);
@@ -68,12 +108,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     });
 
-    // Listen for auth changes
+    // Listen for auth changes.
+    // IMPORTANT: The callback must NOT be async and must NOT return a promise.
+    // Supabase's _notifyAllSubscribers() awaits each callback's return value.
+    // If the callback returned a promise, signInWithPassword/signUp would block
+    // until processSession completes (including DB queries), causing the submit
+    // button to get stuck. Using `void` ensures the callback returns undefined.
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      await processSession(newSession);
-      setIsLoading(false);
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      void processSession(newSession).finally(() => setIsLoading(false));
     });
 
     return () => subscription.unsubscribe();

@@ -27,13 +27,22 @@ function RootRedirect() {
     );
   }
 
-  if (session && userRole) {
+  // Not authenticated -- send to login
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Authenticated with a resolved role -- redirect to the appropriate portal
+  if (userRole) {
     return (
       <Navigate to={userRole === "trainer" ? "/trainer" : "/client"} replace />
     );
   }
 
-  return <Navigate to="/login" replace />;
+  // Authenticated but role could not be determined (all fallbacks failed).
+  // Default to client portal rather than redirecting back to /login,
+  // which would create a silent redirect loop.
+  return <Navigate to="/client" replace />;
 }
 
 function App() {
