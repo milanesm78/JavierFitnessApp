@@ -193,6 +193,15 @@
     "client_deactivated": "Client deactivated",
     "clientPlan": "Training Plan"
   },
+  "history": {
+    "title": "Workout History",
+    "noWorkouts": "No workouts logged yet",
+    "noWorkoutsDescription": "Start your first workout from your training plan.",
+    "loadMore": "Load more",
+    "sessionOn": "Session on",
+    "duration": "Duration",
+    "setsCompleted": "sets completed"
+  },
   "client": {
     "welcome_title": "Welcome, {{name}}!",
     "welcome_message": "Your training plan is coming soon.",

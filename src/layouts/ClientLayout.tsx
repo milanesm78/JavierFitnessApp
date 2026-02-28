@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Home, ClipboardList, Dumbbell, LogOut } from "lucide-react";
+import { Home, ClipboardList, History, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -25,7 +25,7 @@ export function ClientLayout() {
     },
     {
       to: "/client/history",
-      icon: Dumbbell,
+      icon: History,
       label: t("nav.history", "History"),
       end: false,
     },
