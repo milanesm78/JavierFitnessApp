@@ -57,9 +57,10 @@ export function useActivePlan(clientId: string | undefined) {
         )
         .eq("client_id", clientId!)
         .eq("status", "active")
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) return null;
 
       // Sort days and exercises by order
       const plan = data as unknown as PlanWithDays;

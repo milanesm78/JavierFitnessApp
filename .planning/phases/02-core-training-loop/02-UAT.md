@@ -97,7 +97,10 @@ skipped: 12
   reason: "User reported: From a client's page, what I see is two tabs: Plan and Logs. Logs is empty as expected, but Plan's content show 'An error ocurred'"
   severity: blocker
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "useActivePlan() in usePlans.ts uses .single() which throws PGRST116 when no active plan exists (0 rows). Should be .maybeSingle() to return null gracefully."
+  artifacts:
+    - path: "src/features/plans/hooks/usePlans.ts"
+      issue: ".single() on line 60 throws on 0 rows instead of returning null"
+  missing:
+    - "Change .single() to .maybeSingle() in useActivePlan query"
+  debug_session: ".planning/debug/plan-tab-error.md"
