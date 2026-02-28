@@ -265,6 +265,87 @@ export interface Database {
         };
         Relationships: [];
       };
+      body_measurements: {
+        Row: {
+          id: string;
+          client_id: string;
+          measured_at: string;
+          weight: number;
+          height: number;
+          skinfold_triceps: number | null;
+          skinfold_subscapular: number | null;
+          skinfold_suprailiac: number | null;
+          skinfold_abdominal: number | null;
+          skinfold_thigh: number | null;
+          skinfold_calf: number | null;
+          diameter_humeral: number | null;
+          diameter_femoral: number | null;
+          diameter_bistyloidal: number | null;
+          circ_arm_relaxed: number | null;
+          circ_arm_flexed: number | null;
+          circ_chest: number | null;
+          circ_waist: number | null;
+          circ_hip: number | null;
+          circ_thigh: number | null;
+          circ_calf: number | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          client_id: string;
+          measured_at?: string;
+          weight: number;
+          height: number;
+          skinfold_triceps?: number | null;
+          skinfold_subscapular?: number | null;
+          skinfold_suprailiac?: number | null;
+          skinfold_abdominal?: number | null;
+          skinfold_thigh?: number | null;
+          skinfold_calf?: number | null;
+          diameter_humeral?: number | null;
+          diameter_femoral?: number | null;
+          diameter_bistyloidal?: number | null;
+          circ_arm_relaxed?: number | null;
+          circ_arm_flexed?: number | null;
+          circ_chest?: number | null;
+          circ_waist?: number | null;
+          circ_hip?: number | null;
+          circ_thigh?: number | null;
+          circ_calf?: number | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          client_id?: string;
+          measured_at?: string;
+          weight?: number;
+          height?: number;
+          skinfold_triceps?: number | null;
+          skinfold_subscapular?: number | null;
+          skinfold_suprailiac?: number | null;
+          skinfold_abdominal?: number | null;
+          skinfold_thigh?: number | null;
+          skinfold_calf?: number | null;
+          diameter_humeral?: number | null;
+          diameter_femoral?: number | null;
+          diameter_bistyloidal?: number | null;
+          circ_arm_relaxed?: number | null;
+          circ_arm_flexed?: number | null;
+          circ_chest?: number | null;
+          circ_waist?: number | null;
+          circ_hip?: number | null;
+          circ_thigh?: number | null;
+          circ_calf?: number | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -290,6 +371,18 @@ export interface Database {
           has_active_plan: boolean;
           today_workout_status: string;
           last_workout_at: string | null;
+        }[];
+      };
+      get_strength_progress: {
+        Args: {
+          p_client_id: string;
+          p_exercise_id: string;
+          p_from_date?: string;
+          p_to_date?: string;
+        };
+        Returns: {
+          date: string;
+          max_weight: number;
         }[];
       };
     };

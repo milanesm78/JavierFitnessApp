@@ -231,5 +231,41 @@
     "welcome_message": "Your training plan is coming soon.",
     "welcome_description": "Your trainer is preparing your personalized program. Check back soon!",
     "home": "Home"
+  },
+  "measurements": {
+    "newMeasurement": "New Measurement",
+    "general": "General",
+    "skinFolds": "Skin Folds",
+    "boneDiameters": "Bone Diameters",
+    "circumferences": "Circumferences",
+    "step": "Step {{current}} of {{total}}",
+    "next": "Next",
+    "back": "Back",
+    "save": "Save Measurement",
+    "saved": "Measurement saved successfully",
+    "previous": "Previous: {{value}} {{unit}}",
+    "weight": "Weight",
+    "height": "Height",
+    "skinfold_triceps": "Triceps",
+    "skinfold_subscapular": "Subscapular",
+    "skinfold_suprailiac": "Suprailiac",
+    "skinfold_abdominal": "Abdominal",
+    "skinfold_thigh": "Thigh",
+    "skinfold_calf": "Calf",
+    "diameter_humeral": "Humeral",
+    "diameter_femoral": "Femoral",
+    "diameter_bistyloidal": "Bistyloidal",
+    "circ_arm_relaxed": "Arm (relaxed)",
+    "circ_arm_flexed": "Arm (flexed)",
+    "circ_chest": "Chest",
+    "circ_waist": "Waist",
+    "circ_hip": "Hip",
+    "circ_thigh": "Thigh",
+    "circ_calf": "Calf",
+    "validation": {
+      "min": "Minimum value is {{min}}",
+      "max": "Maximum value is {{max}}",
+      "required": "This field is required"
+    }
   }
 }

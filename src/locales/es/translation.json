@@ -231,5 +231,41 @@
     "welcome_message": "Tu plan de entrenamiento llegara pronto.",
     "welcome_description": "Tu entrenador esta preparando tu programa personalizado. Vuelve pronto!",
     "home": "Inicio"
+  },
+  "measurements": {
+    "newMeasurement": "Nueva Medicion",
+    "general": "General",
+    "skinFolds": "Pliegues Cutaneos",
+    "boneDiameters": "Diametros Oseos",
+    "circumferences": "Circunferencias",
+    "step": "Paso {{current}} de {{total}}",
+    "next": "Siguiente",
+    "back": "Atras",
+    "save": "Guardar Medicion",
+    "saved": "Medicion guardada correctamente",
+    "previous": "Anterior: {{value}} {{unit}}",
+    "weight": "Peso",
+    "height": "Altura",
+    "skinfold_triceps": "Triceps",
+    "skinfold_subscapular": "Subescapular",
+    "skinfold_suprailiac": "Suprailíaco",
+    "skinfold_abdominal": "Abdominal",
+    "skinfold_thigh": "Muslo",
+    "skinfold_calf": "Pantorrilla",
+    "diameter_humeral": "Humeral",
+    "diameter_femoral": "Femoral",
+    "diameter_bistyloidal": "Biestiloideo",
+    "circ_arm_relaxed": "Brazo (relajado)",
+    "circ_arm_flexed": "Brazo (flexionado)",
+    "circ_chest": "Pecho",
+    "circ_waist": "Cintura",
+    "circ_hip": "Cadera",
+    "circ_thigh": "Muslo",
+    "circ_calf": "Pantorrilla",
+    "validation": {
+      "min": "El valor minimo es {{min}}",
+      "max": "El valor maximo es {{max}}",
+      "required": "Este campo es obligatorio"
+    }
   }
 }
