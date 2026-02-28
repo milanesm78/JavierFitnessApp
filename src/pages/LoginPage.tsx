@@ -1,7 +1,20 @@
+import { Navigate } from "react-router";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export function LoginPage() {
+  const { session, userRole, isLoading } = useAuth();
+
+  if (!isLoading && session) {
+    return (
+      <Navigate
+        to={userRole === "trainer" ? "/trainer" : "/client"}
+        replace
+      />
+    );
+  }
+
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background p-4">
       <div className="absolute right-4 top-4">

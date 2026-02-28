@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import { useAuth } from "../hooks/useAuth";
 export function LoginForm() {
   const { t } = useTranslation();
   const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +30,7 @@ export function LoginForm() {
 
     try {
       await signIn(email, password);
-      // onAuthStateChange will handle redirect via App routing
+      navigate("/", { replace: true });
     } catch {
       toast.error(t("auth.login_error"));
     } finally {
