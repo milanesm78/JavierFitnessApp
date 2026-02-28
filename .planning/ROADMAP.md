@@ -64,11 +64,11 @@ Plans:
   2. Client and trainer can view measurement history and see body composition changes as line charts over time
   3. Client can view strength progress as line charts showing weight per exercise over time
   4. Trainer can view any client's strength and body measurement progress charts
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — Body measurement data layer (schema, types, Zod validation, hooks) and multi-step wizard form
+- [ ] 03-02-PLAN.md — Measurement history, Recharts progress charts (strength + body), client/trainer page integration
 
 ### Phase 4: Auto-Progression
 **Goal**: The app intelligently suggests weight increases when clients demonstrate readiness, completing the smart coaching loop
