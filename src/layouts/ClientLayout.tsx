@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Home, Dumbbell, LogOut } from "lucide-react";
+import { Home, ClipboardList, Dumbbell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -18,9 +18,15 @@ export function ClientLayout() {
       end: true,
     },
     {
-      to: "/client/workouts",
+      to: "/client/plan",
+      icon: ClipboardList,
+      label: t("nav.myPlan", "My Plan"),
+      end: true,
+    },
+    {
+      to: "/client/history",
       icon: Dumbbell,
-      label: t("nav.workouts"),
+      label: t("nav.history", "History"),
       end: false,
     },
   ];
