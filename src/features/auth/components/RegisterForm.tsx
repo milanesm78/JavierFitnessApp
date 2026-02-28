@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ import type { UserRole } from "../types";
 export function RegisterForm() {
   const { t } = useTranslation();
   const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -55,11 +56,7 @@ export function RegisterForm() {
 
     try {
       await signUp(email, password, fullName.trim(), role);
-      toast.success(t("auth.register_success"));
-
-      if (role === "client") {
-        toast.info(t("auth.register_client_note"), { duration: 6000 });
-      }
+      navigate("/", { replace: true });
     } catch (err) {
       const message =
         err instanceof Error ? err.message : t("common.error");
