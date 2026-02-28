@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 01-foundation-and-exercise-library
 source: [01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md]
 started: 2026-02-28T00:00:00Z
@@ -87,9 +87,21 @@ skipped: 0
   reason: "User reported: I can see the form and add an exercise from youtube, but can't see description and default weight fields."
   severity: major
   test: 8
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "description and default_weight_kg were never implemented — missing from DB schema, TypeScript types, and form component"
+  artifacts:
+    - path: "supabase/migrations/00001_initial_schema.sql"
+      issue: "exercises table missing description and default_weight_kg columns"
+    - path: "src/types/database.ts"
+      issue: "exercises types missing description and default_weight_kg fields"
+    - path: "src/features/exercises/types.ts"
+      issue: "Exercise and ExerciseFormData interfaces missing description and default_weight fields"
+    - path: "src/features/exercises/components/ExerciseForm.tsx"
+      issue: "Form only renders name and youtube_url inputs, no description textarea or weight input"
+  missing:
+    - "New migration adding description text and default_weight_kg numeric columns to exercises"
+    - "Add description and default_weight_kg to Database types (Row, Insert, Update)"
+    - "Add description and default_weight_kg to Exercise and ExerciseFormData types"
+    - "Add description textarea and default weight input to ExerciseForm with state and submit"
   debug_session: ""
 
 - truth: "Delete confirmation dialog button has readable text (not red-on-red)"
@@ -97,7 +109,11 @@ skipped: 0
   reason: "User reported: the delete action works, but the delete button in the confirmation dialog, has a red text on a red background, so the text is invisible"
   severity: cosmetic
   test: 10
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "--destructive-foreground CSS variable is identical to --destructive (copy-paste error) — both are red oklch values"
+  artifacts:
+    - path: "src/index.css"
+      issue: "Light mode: --destructive-foreground same value as --destructive. Dark mode: --destructive-foreground is a red hue instead of white."
+  missing:
+    - "Set --destructive-foreground to oklch(1 0 0) in :root (white)"
+    - "Set --destructive-foreground to oklch(0.985 0 0) in .dark (near-white)"
   debug_session: ""
