@@ -163,7 +163,8 @@
     "settings": "Ajustes",
     "workouts": "Entrenamientos",
     "myPlan": "Mi Plan",
-    "history": "Historial"
+    "history": "Historial",
+    "progress": "Progreso"
   },
   "theme": {
     "light": "Claro",
@@ -215,7 +216,11 @@
     "status_pending": "Pendiente",
     "client_activated": "Cliente activado exitosamente",
     "client_deactivated": "Cliente desactivado",
-    "clientPlan": "Plan de Entrenamiento"
+    "clientPlan": "Plan de Entrenamiento",
+    "tabs": {
+      "progress": "Progreso",
+      "measurements": "Mediciones"
+    }
   },
   "history": {
     "title": "Historial de Entrenamientos",

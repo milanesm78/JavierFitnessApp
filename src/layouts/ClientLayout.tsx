@@ -1,6 +1,6 @@
 import { Outlet, NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Home, ClipboardList, History, LogOut } from "lucide-react";
+import { Home, ClipboardList, History, TrendingUp, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -28,6 +28,12 @@ export function ClientLayout() {
       icon: History,
       label: t("nav.history", "History"),
       end: false,
+    },
+    {
+      to: "/client/progress",
+      icon: TrendingUp,
+      label: t("nav.progress", "Progress"),
+      end: true,
     },
   ];
 

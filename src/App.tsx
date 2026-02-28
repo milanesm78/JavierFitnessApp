@@ -17,6 +17,7 @@ import { WorkoutPage } from "@/pages/client/WorkoutPage";
 import { WorkoutHistoryPage } from "@/pages/client/WorkoutHistoryPage";
 import { PendingActivationPage } from "@/pages/client/PendingActivationPage";
 import { NewMeasurementPage } from "@/pages/trainer/NewMeasurementPage";
+import { ProgressPage } from "@/pages/client/ProgressPage";
 
 // Layouts
 import { TrainerLayout } from "@/layouts/TrainerLayout";
@@ -84,6 +85,7 @@ function App() {
             <Route path="/client" element={<ClientHome />} />
             <Route path="/client/plan" element={<MyPlanPage />} />
             <Route path="/client/history" element={<WorkoutHistoryPage />} />
+            <Route path="/client/progress" element={<ProgressPage />} />
           </Route>
           {/* Workout page: full-screen without bottom nav */}
           <Route path="/client/workout/:trainingDayId" element={<WorkoutPage />} />

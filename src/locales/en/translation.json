@@ -163,7 +163,8 @@
     "settings": "Settings",
     "workouts": "Workouts",
     "myPlan": "My Plan",
-    "history": "History"
+    "history": "History",
+    "progress": "Progress"
   },
   "theme": {
     "light": "Light",
@@ -215,7 +216,11 @@
     "status_pending": "Pending",
     "client_activated": "Client activated successfully",
     "client_deactivated": "Client deactivated",
-    "clientPlan": "Training Plan"
+    "clientPlan": "Training Plan",
+    "tabs": {
+      "progress": "Progress",
+      "measurements": "Measurements"
+    }
   },
   "history": {
     "title": "Workout History",

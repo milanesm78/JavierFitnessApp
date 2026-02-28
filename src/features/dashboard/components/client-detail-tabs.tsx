@@ -16,6 +16,10 @@ import { PlanCard } from "@/features/plans/components/plan-card";
 import { PlanVersionBanner } from "@/features/plans/components/plan-version-banner";
 import { WorkoutHistoryList } from "@/features/workouts/components/workout-history-list";
 import { useWorkoutHistory } from "@/features/workouts/hooks/useWorkouts";
+import { useExercises } from "@/features/exercises/hooks/useExercises";
+import { StrengthChart } from "@/features/progress/components/StrengthChart";
+import { MeasurementChart } from "@/features/progress/components/MeasurementChart";
+import { MeasurementHistory } from "@/features/measurements/components/MeasurementHistory";
 
 interface ClientDetailTabsProps {
   clientId: string;
@@ -26,6 +30,8 @@ interface ClientDetailTabsProps {
  * Tabbed view of a specific client's data for the trainer.
  * Tab 1: Plan (consolidated from ClientPlanPage) with version management
  * Tab 2: Logs (client's recent workout sessions)
+ * Tab 3: Progress (strength and body measurement charts)
+ * Tab 4: Measurements (measurement history with add button)
  */
 export function ClientDetailTabs({
   clientId,
@@ -43,6 +49,12 @@ export function ClientDetailTabs({
         <TabsTrigger value="logs" className="flex-1">
           {t("clientDetail.logs", "Logs")}
         </TabsTrigger>
+        <TabsTrigger value="progress" className="flex-1">
+          {t("trainer.tabs.progress", "Progress")}
+        </TabsTrigger>
+        <TabsTrigger value="measurements" className="flex-1">
+          {t("trainer.tabs.measurements", "Measurements")}
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="plan">
@@ -55,6 +67,14 @@ export function ClientDetailTabs({
 
       <TabsContent value="logs">
         <LogsTab clientId={clientId} />
+      </TabsContent>
+
+      <TabsContent value="progress">
+        <ProgressTab clientId={clientId} />
+      </TabsContent>
+
+      <TabsContent value="measurements">
+        <MeasurementsTab clientId={clientId} navigate={navigate} />
       </TabsContent>
     </Tabs>
   );
@@ -208,6 +228,49 @@ function LogsTab({ clientId }: { clientId: string }) {
   return (
     <div className="pt-2">
       <WorkoutHistoryList sessions={sessions ?? []} />
+    </div>
+  );
+}
+
+/**
+ * Progress tab: Strength and body measurement charts for the client.
+ */
+function ProgressTab({ clientId }: { clientId: string }) {
+  const { data: exercises } = useExercises();
+
+  const exerciseList = (exercises ?? []).map((e) => ({
+    id: e.id,
+    name: e.name,
+  }));
+
+  return (
+    <div className="space-y-6 pt-2">
+      {exerciseList.length > 0 && (
+        <StrengthChart clientId={clientId} exercises={exerciseList} />
+      )}
+      <MeasurementChart clientId={clientId} />
+    </div>
+  );
+}
+
+/**
+ * Measurements tab: Measurement history with navigation to new measurement form.
+ */
+function MeasurementsTab({
+  clientId,
+  navigate,
+}: {
+  clientId: string;
+  navigate: ReturnType<typeof useNavigate>;
+}) {
+  return (
+    <div className="pt-2">
+      <MeasurementHistory
+        clientId={clientId}
+        onNewMeasurement={() =>
+          navigate(`/trainer/clients/${clientId}/measurements/new`)
+        }
+      />
     </div>
   );
 }
