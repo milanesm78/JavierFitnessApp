@@ -29,12 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Trainer can create, edit, and delete exercises with name and YouTube video link
   4. User can toggle between Spanish and English and the entire interface updates accordingly
   5. All pages are usable on a mobile phone browser without horizontal scrolling, and weight inputs accept both comma and period as decimal separators
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
 - [x] 01-01-PLAN.md — Project scaffold, Supabase schema, i18n, Tailwind + shadcn/ui, utilities
 - [x] 01-02-PLAN.md — Auth system, role-based routing, portal layouts, theme toggle, client activation
 - [x] 01-03-PLAN.md — Exercise library CRUD, DecimalInput component (Tasks 1 & 2 complete; Task 3 human-verify pending)
+- [ ] 01-04-PLAN.md — UAT gap closure: add exercise description/default weight fields, fix delete button color
 
 ### Phase 2: Core Training Loop
 **Goal**: Trainer can build personalized training plans and clients can view their workouts, watch exercise videos, and log every set at the gym -- the complete daily training workflow
@@ -88,7 +89,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Exercise Library | 3/3 | Awaiting human verification | - |
-| 2. Core Training Loop | 1/4 | In progress | - |
+| 1. Foundation and Exercise Library | 3/4 | UAT gap closure pending | - |
+| 2. Core Training Loop | 2/4 | In progress | - |
 | 3. Measurements and Progress | 0/2 | Not started | - |
 | 4. Auto-Progression | 0/1 | Not started | - |
