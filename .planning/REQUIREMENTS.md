@@ -46,13 +46,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **BODY-01**: Client can fill monthly body measurement form with full anthropometric protocol (weight, height, skin folds, bone diameters, circumferences)
 - [x] **BODY-02**: Measurement form validates input ranges to prevent data entry errors
-- [ ] **BODY-03**: Client and trainer can view measurement history
+- [x] **BODY-03**: Client and trainer can view measurement history
 
 ### Progress Tracking
 
-- [ ] **TRCK-01**: Client can view strength progress as line charts (weight per exercise over time)
-- [ ] **TRCK-02**: Client can view body measurement progress as line charts (measurements over time)
-- [ ] **TRCK-03**: Trainer can view any client's strength and body progress charts
+- [x] **TRCK-01**: Client can view strength progress as line charts (weight per exercise over time)
+- [x] **TRCK-02**: Client can view body measurement progress as line charts (measurements over time)
+- [x] **TRCK-03**: Trainer can view any client's strength and body progress charts
 
 ### Trainer Dashboard
 
@@ -125,10 +125,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROG-02 | Phase 4 | Pending |
 | BODY-01 | Phase 3 | Complete |
 | BODY-02 | Phase 3 | Complete |
-| BODY-03 | Phase 3 | Pending |
-| TRCK-01 | Phase 3 | Pending |
-| TRCK-02 | Phase 3 | Pending |
-| TRCK-03 | Phase 3 | Pending |
+| BODY-03 | Phase 3 | Complete |
+| TRCK-01 | Phase 3 | Complete |
+| TRCK-02 | Phase 3 | Complete |
+| TRCK-03 | Phase 3 | Complete |
 | DASH-01 | Phase 2 | Complete |
 | DASH-02 | Phase 2 | Complete |
 | DASH-03 | Phase 2 | Pending |
