@@ -77,11 +77,12 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. When a client logs 15+ reps on an exercise, the app displays a suggestion to increase weight by 2.5kg for the next session
   2. The suggestion is clearly presented as a recommendation that the client or trainer must confirm before it takes effect
-**Plans:** 2 plans
+**Plans:** 3 plans
 
 Plans:
 - [ ] 04-01-PLAN.md — Progression data layer: SQL migration (table, RPC functions, RLS), types, TanStack Query hooks, session completion integration
 - [ ] 04-02-PLAN.md — Progression UI: suggestion cards, post-workout summary integration, trainer client detail integration, i18n
+- [ ] 04-03-PLAN.md — Gap closure: fix accepted_toast interpolation params and error key name mismatches in i18n
 
 ## Progress
 
