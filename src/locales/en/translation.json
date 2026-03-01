@@ -154,7 +154,8 @@
     "noPlanDescription": "No training plan assigned yet. Your trainer will create one for you.",
     "trainingDay": "Training Day",
     "showVideo": "Show video",
-    "hideVideo": "Hide video"
+    "hideVideo": "Hide video",
+    "videoUnavailable": "Video unavailable"
   },
   "nav": {
     "dashboard": "Dashboard",

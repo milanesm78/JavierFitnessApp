@@ -154,7 +154,8 @@
     "noPlanDescription": "Aun no tienes un plan asignado. Tu entrenador creara uno para ti.",
     "trainingDay": "Dia de Entrenamiento",
     "showVideo": "Ver video",
-    "hideVideo": "Ocultar video"
+    "hideVideo": "Ocultar video",
+    "videoUnavailable": "Video no disponible"
   },
   "nav": {
     "dashboard": "Panel",
