@@ -288,5 +288,20 @@
     "maxWeight": "Peso Maximo",
     "noMeasurements": "No hay mediciones registradas",
     "measurementCount": "{{count}} mediciones"
+  },
+  "progression": {
+    "suggestion_title": "Sugerencia de Aumento de Peso",
+    "suggestion_body": "Has hecho {{reps}}+ reps en {{exercise}} con {{currentWeight}}kg. Aumentar a {{suggestedWeight}}kg?",
+    "accept": "Aumentar Peso",
+    "dismiss": "Ahora No",
+    "accepted_toast": "Peso actualizado a {{weight}}kg para {{exercise}}",
+    "dismissed_toast": "Sugerencia descartada",
+    "stale_warning": "Esta sugerencia esta desactualizada -- el peso prescrito ya ha cambiado.",
+    "pending_suggestions": "Sugerencias de Progresion",
+    "no_suggestions": "Sin sugerencias pendientes",
+    "current_weight": "Actual",
+    "suggested_weight": "Sugerido",
+    "error_accept": "Error al aceptar sugerencia",
+    "error_dismiss": "Error al descartar sugerencia"
   }
 }
