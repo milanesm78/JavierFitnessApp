@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 03-measurements-and-progress
 source: 03-01-SUMMARY.md, 03-02-SUMMARY.md
 started: 2026-02-28T21:00:00Z
@@ -70,7 +70,12 @@ skipped: 1
   reason: "User reported: When trying to save the measurements, I see a toast message: An error occurred"
   severity: blocker
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Migration 00004_body_measurements.sql has not been applied to the remote Supabase database. The body_measurements table does not exist remotely, so the Supabase INSERT call fails."
+  artifacts:
+    - path: "supabase/migrations/00004_body_measurements.sql"
+      issue: "Migration not pushed to remote database"
+    - path: "src/features/measurements/hooks/useMeasurements.ts"
+      issue: "INSERT fails at line 100-106 because target table missing remotely"
+  missing:
+    - "Run supabase db push to apply pending migrations (00004, 00005) to remote database"
+  debug_session: ".planning/debug/measurement-submit-error.md"
