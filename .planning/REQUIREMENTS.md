@@ -39,8 +39,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Auto-Progression
 
-- [ ] **PROG-01**: App detects when client logs 15+ reps on an exercise and suggests +2.5kg for next session
-- [ ] **PROG-02**: Auto-progression is a suggestion -- client or trainer confirms before applying
+- [x] **PROG-01**: App detects when client logs 15+ reps on an exercise and suggests +2.5kg for next session
+- [x] **PROG-02**: Auto-progression is a suggestion -- client or trainer confirms before applying
 
 ### Body Measurements
 
@@ -121,8 +121,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WLOG-02 | Phase 2 | Complete |
 | WLOG-03 | Phase 2 | Complete |
 | WLOG-04 | Phase 2 | Complete |
-| PROG-01 | Phase 4 | Pending |
-| PROG-02 | Phase 4 | Pending |
+| PROG-01 | Phase 4 | Complete |
+| PROG-02 | Phase 4 | Complete |
 | BODY-01 | Phase 3 | Complete |
 | BODY-02 | Phase 3 | Complete |
 | BODY-03 | Phase 3 | Complete |

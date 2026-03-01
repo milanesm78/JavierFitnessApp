@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Clients always have their personalized training plan at their fingertips -- with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
-**Current focus:** Phase 3: Measurements and Progress
+**Current focus:** Phase 4: Auto-Progression
 
 ## Current Position
 
-Phase: 3 of 4 (Measurements and Progress)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-28 - Completed 03-02 (Measurement history and progress charts)
+Phase: 4 of 4 (Auto-Progression)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-28 - Completed 04-01 (Progression data layer)
 
-Progress: [████████░░] 80%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 13min
-- Total execution time: ~109min
+- Total execution time: ~115min
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [████████░░] 80%
 | 1 | 4 | ~41min | 10min |
 | 2 | 2 | 31min | 16min |
 | 3 | 2 | 27min | 14min |
+| 4 | 1 | 6min | 6min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (22min), 01-04 (6min), 03-01 (10min), 03-02 (17min)
+- Last 5 plans: 01-04 (6min), 03-01 (10min), 03-02 (17min), 04-01 (6min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -88,6 +89,12 @@ Recent decisions affecting current work:
 - [03-02]: CHART_COLORS uses HSL values for consistent contrast on both light and dark themes
 - [03-02]: MEASUREMENT_CHART_FIELDS constant maps measurement fields to i18n keys, units, and categories for data-driven selector UI
 - [03-02]: useTranslation() called directly in sub-components rather than passing t as prop to avoid i18next type narrowing issues
+- [04-01]: SECURITY INVOKER for all 3 progression RPC functions so RLS applies in calling user's context
+- [04-01]: Fire-and-forget pattern for progression detection in useCompleteSession onSuccess
+- [04-01]: Stale suggestion auto-dismiss on accept when prescribed weight has changed
+- [04-01]: 3-session cooldown for re-suggestion after dismissal, counted by completed sessions
+- [04-01]: Per-exercise increment via COALESCE(progression_increment_kg, 2.5) -- NULL defaults to 2.5kg
+- [04-01]: Warm-up filter: only evaluate sets where weight_kg >= prescribed_weight_kg
 
 ### Pending Todos
 
@@ -109,5 +116,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 03-02-PLAN.md (Measurement history and progress charts) - Phase 3 complete
-Resume file: .planning/phases/03-measurements-and-progress/03-02-SUMMARY.md
+Stopped at: Completed 04-01-PLAN.md (Progression data layer)
+Resume file: .planning/phases/04-auto-progression/04-01-SUMMARY.md
