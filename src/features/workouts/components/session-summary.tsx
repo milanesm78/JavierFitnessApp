@@ -3,8 +3,10 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { CheckCircle2, Timer, Dumbbell, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ProgressionSuggestionList } from "@/features/progression/components/ProgressionSuggestionList";
 
 interface SessionSummaryProps {
+  clientId: string;
   duration: number; // seconds
   totalSetsLogged: number;
   totalExercises: number;
@@ -16,6 +18,7 @@ interface SessionSummaryProps {
  * Clean, celebratory-but-simple design with green accent.
  */
 export function SessionSummary({
+  clientId,
   duration,
   totalSetsLogged,
   totalExercises,
@@ -74,6 +77,11 @@ export function SessionSummary({
             {t("workout.exercisesCompleted", "Exercises")}
           </span>
         </div>
+      </div>
+
+      {/* Progression suggestions */}
+      <div className="w-full max-w-sm">
+        <ProgressionSuggestionList clientId={clientId} />
       </div>
 
       {/* Done button */}

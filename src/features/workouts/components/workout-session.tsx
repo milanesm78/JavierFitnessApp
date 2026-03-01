@@ -129,6 +129,7 @@ export function WorkoutSession({
   if (isCompleted && activeSession) {
     return (
       <SessionSummary
+        clientId={clientId!}
         duration={elapsedSeconds}
         totalSetsLogged={totalSetsLogged}
         totalExercises={trainingDay.plan_exercises.length}

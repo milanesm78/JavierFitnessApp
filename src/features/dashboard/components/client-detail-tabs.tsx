@@ -20,6 +20,7 @@ import { useExercises } from "@/features/exercises/hooks/useExercises";
 import { StrengthChart } from "@/features/progress/components/StrengthChart";
 import { MeasurementChart } from "@/features/progress/components/MeasurementChart";
 import { MeasurementHistory } from "@/features/measurements/components/MeasurementHistory";
+import { ProgressionSuggestionList } from "@/features/progression/components/ProgressionSuggestionList";
 
 interface ClientDetailTabsProps {
   clientId: string;
@@ -149,6 +150,9 @@ function PlanTab({
 
   return (
     <div className="space-y-4 pt-2">
+      {/* Progression suggestions */}
+      <ProgressionSuggestionList clientId={clientId} />
+
       {/* Draft version banner */}
       {draftPlan && (
         <PlanVersionBanner
