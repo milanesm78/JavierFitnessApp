@@ -5,30 +5,30 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Clients always have their personalized training plan at their fingertips -- with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
-**Current focus:** Gap Closure: Phase 2 YouTube Video Fix
+**Current focus:** Completed 02-04 SUMMARY backfill
 
 ## Current Position
 
 Phase: 4 of 4 (Auto-Progression) + gap closures
-Plan: 02-05 gap closure complete
-Status: Gap closure complete
-Last activity: 2026-03-01 - Completed 02-05 (YouTube video fix gap closure)
+Plan: 02-04 SUMMARY backfilled, all plans complete
+Status: SUMMARY backfill complete
+Last activity: 2026-03-01 - Backfilled 02-04-SUMMARY.md (was missing from prior session)
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 10min
-- Total execution time: ~130min
+- Total execution time: ~138min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 4 | ~41min | 10min |
-| 2 | 3 | 38min | 13min |
+| 2 | 4 | 46min | 12min |
 | 3 | 2 | 27min | 14min |
 | 4 | 3 | 14min | 5min |
 
@@ -102,6 +102,10 @@ Recent decisions affecting current work:
 - [04-02]: Suggestions placed at top of trainer PlanTab for immediate visibility
 - [04-03]: Mutation accepts context object {suggestionId, exerciseName, suggestedWeight} so onSuccess can interpolate toast without refetching
 - [04-03]: Renamed JSON keys (error_accept -> accept_error) rather than changing hook references, since hook naming convention (verb_noun) is more natural
+- [02-04]: Expandable cards for workout history (tap to reveal sets) for compact mobile layout
+- [02-04]: Client-side search filter for trainer client list (20-50 clients fits in memory)
+- [02-04]: ClientPlanPage consolidated into ClientDetailTabs Plan tab; original file deleted
+- [02-04]: ClientDetailTabs expanded to 4 tabs (Plan, Logs, Progress, Measurements) to include Phase 3/4 features
 - [02-05]: URL()-based YouTube parser replacing strict regex -- handles all URL formats including /shorts/
 - [02-05]: isValidYouTubeUrl delegates to extractYouTubeVideoId -- validation tied to extractability eliminates mismatch
 
@@ -125,5 +129,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 02-05-PLAN.md (YouTube video fix gap closure)
-Resume file: .planning/phases/02-core-training-loop/02-05-SUMMARY.md
+Stopped at: Completed 02-04-PLAN.md (SUMMARY backfill)
+Resume file: .planning/phases/02-core-training-loop/02-04-SUMMARY.md

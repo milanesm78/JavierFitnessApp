@@ -58,7 +58,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **DASH-01**: Trainer can view list of all clients with activity status (active, inactive, pending)
 - [x] **DASH-02**: Trainer sees color-coded indicators showing which clients completed today's workout
-- [ ] **DASH-03**: Trainer can select a client to view their plan, logs, and progress
+- [x] **DASH-03**: Trainer can select a client to view their plan, logs, and progress
 
 ### Infrastructure
 
@@ -131,7 +131,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRCK-03 | Phase 3 | Complete |
 | DASH-01 | Phase 2 | Complete |
 | DASH-02 | Phase 2 | Complete |
-| DASH-03 | Phase 2 | Pending |
+| DASH-03 | Phase 2 | Complete |
 | INFR-01 | Phase 1 | Complete |
 | INFR-02 | Phase 1 | Complete |
 | INFR-03 | Phase 1 | Complete |
