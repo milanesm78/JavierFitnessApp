@@ -5,35 +5,35 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Clients always have their personalized training plan at their fingertips -- with video guidance, easy workout logging, and visible progress that keeps them engaged and coming back.
-**Current focus:** Phase 4: Auto-Progression
+**Current focus:** Gap Closure: Phase 2 YouTube Video Fix
 
 ## Current Position
 
-Phase: 4 of 4 (Auto-Progression)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-02-28 - Completed 04-03 (Progression i18n gap closure)
+Phase: 4 of 4 (Auto-Progression) + gap closures
+Plan: 02-05 gap closure complete
+Status: Gap closure complete
+Last activity: 2026-03-01 - Completed 02-05 (YouTube video fix gap closure)
 
 Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 11min
-- Total execution time: ~123min
+- Total plans completed: 12
+- Average duration: 10min
+- Total execution time: ~130min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 4 | ~41min | 10min |
-| 2 | 2 | 31min | 16min |
+| 2 | 3 | 38min | 13min |
 | 3 | 2 | 27min | 14min |
 | 4 | 3 | 14min | 5min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (10min), 03-02 (17min), 04-01 (6min), 04-02 (5min), 04-03 (3min)
+- Last 5 plans: 03-02 (17min), 04-01 (6min), 04-02 (5min), 04-03 (3min), 02-05 (7min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -102,6 +102,8 @@ Recent decisions affecting current work:
 - [04-02]: Suggestions placed at top of trainer PlanTab for immediate visibility
 - [04-03]: Mutation accepts context object {suggestionId, exerciseName, suggestedWeight} so onSuccess can interpolate toast without refetching
 - [04-03]: Renamed JSON keys (error_accept -> accept_error) rather than changing hook references, since hook naming convention (verb_noun) is more natural
+- [02-05]: URL()-based YouTube parser replacing strict regex -- handles all URL formats including /shorts/
+- [02-05]: isValidYouTubeUrl delegates to extractYouTubeVideoId -- validation tied to extractability eliminates mismatch
 
 ### Pending Todos
 
@@ -122,6 +124,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-28
-Stopped at: Completed 04-03-PLAN.md (Progression i18n gap closure) -- All phases complete
-Resume file: .planning/phases/04-auto-progression/04-03-SUMMARY.md
+Last session: 2026-03-01
+Stopped at: Completed 02-05-PLAN.md (YouTube video fix gap closure)
+Resume file: .planning/phases/02-core-training-loop/02-05-SUMMARY.md
