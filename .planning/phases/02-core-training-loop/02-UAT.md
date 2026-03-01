@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 02-core-training-loop
 source: [02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md]
 started: 2026-02-28T00:00:00Z
@@ -87,7 +87,19 @@ skipped: 0
   reason: "User reported: I can't see the video when taping the icon"
   severity: major
   test: 8
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "extractYouTubeVideoId() in youtube.ts uses strict 11-char regex that returns null for some valid URLs. YouTubePlayer returns null when no ID extracted, so CollapsibleContent opens but is empty. ExerciseForm uses a separate permissive URL() validation, creating a mismatch."
+  artifacts:
+    - path: "src/lib/utils/youtube.ts"
+      issue: "Strict regex patterns miss valid YouTube URLs, returns null"
+    - path: "src/features/workouts/components/youtube-player.tsx"
+      issue: "Returns null when no video ID — no fallback UI"
+    - path: "src/features/exercises/components/ExerciseForm.tsx"
+      issue: "Uses permissive hostname-only validation, allows URLs that fail at render"
+    - path: "src/features/plans/components/training-day-tab.tsx"
+      issue: "CollapsibleContent wraps YouTubePlayer which renders nothing"
+  missing:
+    - "Unify YouTube URL validation to use single shared extractYouTubeVideoId across form and player"
+    - "Make ExerciseForm reject URLs where video ID cannot be extracted"
+    - "Make extractYouTubeVideoId regex less strict (handle /shorts/, varying ID lengths)"
+    - "Add visible fallback in CollapsibleContent when no video available"
+  debug_session: ".planning/debug/exercise-video-not-showing.md"
