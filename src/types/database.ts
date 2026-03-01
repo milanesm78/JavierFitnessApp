@@ -24,12 +24,14 @@ export interface Exercise {
   youtube_url: string;
   description: string | null;
   default_weight_kg: number | null;
+  progression_increment_kg: number | null;
   created_by: string;
   created_at: string;
   updated_at: string;
 }
 
 export type PlanStatus = "draft" | "active" | "archived";
+export type ProgressionStatus = "pending" | "accepted" | "dismissed";
 
 export interface Database {
   public: {
@@ -95,6 +97,7 @@ export interface Database {
           youtube_url: string;
           description: string | null;
           default_weight_kg: number | null;
+          progression_increment_kg: number | null;
           created_by: string;
           created_at: string;
           updated_at: string;
@@ -105,6 +108,7 @@ export interface Database {
           youtube_url: string;
           description?: string | null;
           default_weight_kg?: number | null;
+          progression_increment_kg?: number | null;
           created_by?: string;
           created_at?: string;
           updated_at?: string;
@@ -115,6 +119,7 @@ export interface Database {
           youtube_url?: string;
           description?: string | null;
           default_weight_kg?: number | null;
+          progression_increment_kg?: number | null;
           created_by?: string;
           created_at?: string;
           updated_at?: string;
@@ -346,6 +351,48 @@ export interface Database {
         };
         Relationships: [];
       };
+      progression_suggestions: {
+        Row: {
+          id: string;
+          client_id: string;
+          exercise_id: string;
+          plan_exercise_id: string;
+          current_weight_kg: number;
+          suggested_weight_kg: number;
+          triggered_by_session_id: string;
+          status: ProgressionStatus;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          client_id: string;
+          exercise_id: string;
+          plan_exercise_id: string;
+          current_weight_kg: number;
+          suggested_weight_kg: number;
+          triggered_by_session_id: string;
+          status?: ProgressionStatus;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          client_id?: string;
+          exercise_id?: string;
+          plan_exercise_id?: string;
+          current_weight_kg?: number;
+          suggested_weight_kg?: number;
+          triggered_by_session_id?: string;
+          status?: ProgressionStatus;
+          resolved_at?: string | null;
+          resolved_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -372,6 +419,36 @@ export interface Database {
           today_workout_status: string;
           last_workout_at: string | null;
         }[];
+      };
+      check_progression_eligibility: {
+        Args: {
+          p_session_id: string;
+        };
+        Returns: {
+          id: string;
+          client_id: string;
+          exercise_id: string;
+          plan_exercise_id: string;
+          current_weight_kg: number;
+          suggested_weight_kg: number;
+          triggered_by_session_id: string;
+          status: ProgressionStatus;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          created_at: string;
+        }[];
+      };
+      accept_progression_suggestion: {
+        Args: {
+          p_suggestion_id: string;
+        };
+        Returns: undefined;
+      };
+      dismiss_progression_suggestion: {
+        Args: {
+          p_suggestion_id: string;
+        };
+        Returns: undefined;
       };
       get_strength_progress: {
         Args: {

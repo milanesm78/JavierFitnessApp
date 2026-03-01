@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { workoutKeys } from "./useWorkouts";
 import { dashboardKeys } from "@/features/dashboard/hooks/useDashboard";
+import { progressionKeys } from "@/features/progression/hooks/useProgression";
 import type { WorkoutSet } from "../types";
 
 /**
@@ -150,6 +151,23 @@ export function useCompleteSession() {
       toast.success(
         t("workouts.completed", "Workout completed!")
       );
+
+      // Fire-and-forget: check for progression eligibility after session completion.
+      // Detection failure should not break session completion UX.
+      try {
+        supabase
+          .rpc("check_progression_eligibility", { p_session_id: data.id })
+          .then(() => {
+            queryClient.invalidateQueries({
+              queryKey: progressionKeys.pending(data.clientId),
+            });
+          })
+          .catch(() => {
+            // Silently ignore progression detection errors
+          });
+      } catch {
+        // Silently ignore progression detection errors
+      }
     },
     onError: () => {
       toast.error(
