@@ -84,7 +84,14 @@ export function MeasurementWizard({
     setCurrentStep((s) => Math.max(s - 1, 0));
   };
 
+  const handleFormKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !isLastStep) {
+      e.preventDefault();
+    }
+  };
+
   const onSubmit = (data: MeasurementFormValues) => {
+    if (!isLastStep) return;
     createMeasurement.mutate(
       { clientId, data },
       {
@@ -113,7 +120,7 @@ export function MeasurementWizard({
   const isLastStep = currentStep === totalSteps - 1;
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} onKeyDown={handleFormKeyDown} className="space-y-6">
       {/* Progress indicator */}
       <div className="space-y-2">
         <p className="text-sm font-medium text-muted-foreground">
