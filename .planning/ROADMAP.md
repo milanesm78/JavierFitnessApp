@@ -78,12 +78,13 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. When a client logs 15+ reps on an exercise, the app displays a suggestion to increase weight by 2.5kg for the next session
   2. The suggestion is clearly presented as a recommendation that the client or trainer must confirm before it takes effect
-**Plans:** 3/3 plans complete
+**Plans:** 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Progression data layer: SQL migration (table, RPC functions, RLS), types, TanStack Query hooks, session completion integration
-- [ ] 04-02-PLAN.md — Progression UI: suggestion cards, post-workout summary integration, trainer client detail integration, i18n
-- [ ] 04-03-PLAN.md — Gap closure: fix accepted_toast interpolation params and error key name mismatches in i18n
+- [x] 04-01-PLAN.md — Progression data layer: SQL migration (table, RPC functions, RLS), types, TanStack Query hooks, session completion integration
+- [x] 04-02-PLAN.md — Progression UI: suggestion cards, post-workout summary integration, trainer client detail integration, i18n
+- [x] 04-03-PLAN.md — Gap closure: fix accepted_toast interpolation params and error key name mismatches in i18n
+- [ ] 04-04-PLAN.md — UAT gap closure: fix silent RPC error swallowing and race condition preventing suggestions from appearing
 
 ## Progress
 
@@ -95,4 +96,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Foundation and Exercise Library | 3/4 | UAT gap closure pending | - |
 | 2. Core Training Loop | 3/5 | UAT gap closure pending | - |
 | 3. Measurements and Progress | 0/2 | Not started | - |
-| 4. Auto-Progression | 0/2 | Complete    | 2026-03-01 |
+| 4. Auto-Progression | 3/4 | UAT gap closure pending | - |
