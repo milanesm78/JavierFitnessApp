@@ -17,7 +17,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "javier-fitness-theme";
+const STORAGE_KEY = "la-aldea-fit-app-theme";
 
 function getInitialTheme(): Theme {
   // Check localStorage first
